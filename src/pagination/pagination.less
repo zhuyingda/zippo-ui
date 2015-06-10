@@ -1,0 +1,38 @@
+.page-box{
+  display: none;
+  float: right;
+  margin-right: -9px;
+  .page-wrap{
+    float: left;
+  }
+  .page-btn,
+  .page-item{
+    background: #e0e0e0;
+    color: #ffffff;
+    font-size: 12px;
+    font-family:"宋体";
+    float: left;
+    margin-right: 10px;
+    padding: 5px;
+    cursor: pointer;
+  }
+  .btn-green{
+    background: #00c9bd;
+  }
+  .prev{
+    background: #00c9bd;
+  }
+  .next{
+    background: #00c9bd;
+  }
+}
+.page-box.in-first-page{
+  .prev{
+    background: #e0e0e0;
+  }
+}
+.page-box.in-last-page{
+  .next{
+    background: #e0e0e0;
+  }
+}
