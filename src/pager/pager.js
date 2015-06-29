@@ -9,13 +9,13 @@
  * @require jquery
  */
 
-require('./pagination.less');
+require('./page.less');
 
 var
   /**
    * @desc 翻页模块骨架
    */
-  base = require('./base.handlebars'),
+  base = require('./page.handlebars'),
 
   /**
    * @desc 当前所在页（从1开始）
@@ -26,13 +26,6 @@ var
    * @desc 评论总条数
    */
   total = 0;
-
-/**
- * @desc 设置当前页
- */
-function setCurPage(p){
-  curPage = p;
-}
 
 /**
  * @desc 获取当前页
@@ -46,19 +39,13 @@ function getCurPage(){
  */
 function setTotal(n){
   total = n;
-}
-
-/**
- * @desc 获取总条数
- */
-function getTotal(){
-  return total;
+  renderPager(curPage);
 }
 
 /**
  * @desc 翻到第x页
  */
-function renderPageBtns(pageNum){
+function renderPager(pageNum){
   var
     /**
      * @desc 每页显示的评论数
@@ -75,15 +62,19 @@ function renderPageBtns(pageNum){
     /**
      * @desc 总页数
      */
-    pageLen = Math.ceil(total / itemInPage) + 1;
+    pageLen = Math.ceil(total / itemInPage) + 1,
+    /**
+     * @desc 总页数
+     */
+    pagerContainer = $('.page-wrap');
 
   begin = beginCal(pageNum, limit, pageLen);
   /**
    * @desc 渲染翻页列表
    */
-  $('.page-wrap').empty();
+  pagerContainer.empty();
   for(var i=begin;i<begin+limit;i++){
-    $('.page-wrap').append('<div class="page-item">' + i + '</div>');
+    pagerContainer.append('<div class="page-item">' + i + '</div>');
   }
   for(i=0;i<$('.page-item').length;i++) {
     if (pageNum == $('.page-item:eq('+i+')').html()) {
@@ -126,65 +117,42 @@ function edgeCheck(pageNum, pageLen){
 }
 
 /**
- * @desc 下一页
+ * @desc 翻页回调
  */
-function onTurnNext(func){
+function onTurn(func) {
   $('.next').click(function () {
     if(!$('.page-box').hasClass('in-last-page')){
-      renderPageBtns(++curPage);
-      func();
+      renderPager(++curPage);
+      func(curPage);
     }
   });
-}
-
-/**
- * @desc 上一页
- */
-function onTurnPrev(func){
   $('.prev').click(function () {
     if(!$('.page-box').hasClass('in-first-page')){
-      renderPageBtns(--curPage);
-      func();
+      renderPager(--curPage);
+      func(curPage);
     }
   });
-}
-
-/**
- * @desc 翻页
- */
-function onTurnNum(func){
   $('.page-wrap').on('click', '.page-item', function () {
-    renderPageBtns($(this).html());
+    renderPager($(this).html());
     func($(this).html());
   });
 }
 
 /**
- * @desc 监听事件
+ * @desc 组件初始化
  */
-function on(opts){
+function init(opts){
+  var cont = base();
+  opts.$el.html(cont);
   $('.page-item').click(function () {
     $(this).addClass('btn-green').siblings().removeClass('btn-green');
   });
-  onTurnNext(opts.onTurnNext || function(){console.log('未绑定下一页回调')});
-  onTurnPrev(opts.onTurnPrev || function(){console.log('未绑定上一页回调')});
-  onTurnNum(opts.onTurnNum || function(){console.log('未绑定翻页回调')});
-}
-
-/**
- * @desc 组件初始化
- */
-function init($el){
-  var cont = base();
-  $el.html(cont);
+  onTurn(opts.onTurn || function(){console.log('未绑定翻页回调')});
+  renderPager(1);
 }
 
 module.exports = {
-  renderPageBtns: renderPageBtns,
-  setCurPage: setCurPage,
   getCurPage: getCurPage,
   setTotal: setTotal,
-  getTotal: getTotal,
-  on: on,
   init: init
 }
