@@ -23,6 +23,11 @@ var
   curPage = 1,
 
   /**
+   * @desc 每页显示评论数
+   */
+  pageLimit = 10,
+
+  /**
    * @desc 评论总条数
    */
   total = 0;
@@ -50,7 +55,7 @@ function renderPager(pageNum){
     /**
      * @desc 每页显示的评论数
      */
-    itemInPage = options.limit,
+    itemInPage = pageLimit,
     /**
      * @desc 每页显示的翻页按钮数
      */
@@ -144,6 +149,7 @@ function onTurn(func) {
 function init(opts){
   var cont = base();
   opts.$el.html(cont);
+  limit = opts.limit || 10;
   $('.page-item').click(function () {
     $(this).addClass('btn-green').siblings().removeClass('btn-green');
   });
