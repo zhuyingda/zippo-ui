@@ -19,7 +19,14 @@ var
   /**
    * @desc 配置
    */
-  opt = {};
+  opt = {
+    $item: null,
+    $list: null,
+    $btnL: null,
+    $btnR: null,
+    period: 4000,
+    velocity: 300
+  };
 
 function stop() {
   clearInterval(interval);
@@ -60,19 +67,6 @@ function curLeft() {
   return opt.$list.css('left');
 }
 
-function on() {
-  opt.$item.mouseenter(function () {
-    opt.$mask.eq($(this).index()).slideDown(300);
-  }).mouseleave(function () {
-    opt.$mask.not($(this).index())
-      .removeAttr('style')
-      .hide()
-      .clearQueue()
-      .eq($(this).index())
-      .slideUp(200);
-  });
-}
-
 function init(option) {
   opt = option;
   itemWidth = parseInt(opt.$item.css('width')) + parseInt(opt.$item.css('margin-right'));
@@ -82,8 +76,6 @@ function init(option) {
   opt.$btnL.click(turnLeft);
   opt.$btnR.click(turnRight);
   opt.$list.mouseenter(stop).mouseleave(play);
-
-  on();
 
   play();
 }
