@@ -1,3 +1,13 @@
+/**
+ * @widget
+ * @author zyd
+ * @version 1.1
+ * pager   -   分页
+ * @author yingdazhu@icloud.com
+ * @module UMD
+ * @require pager.css
+ * @require jquery
+ */
 ;(function ($, undefined) {
   var
     /**
@@ -110,7 +120,7 @@
     if (btns <= pageLen) {
       return btns + begin;
     } else {
-      return pageLen + begin -1;
+      return pageLen + begin - 1;
     }
   }
 

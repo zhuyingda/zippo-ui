@@ -1,11 +1,12 @@
 /**
  * @widget
  * @author zyd
- * @version 1.0
- * page   -   分页
+ * @version 1.1
+ * pager   -   分页
+ * @author yingdazhu@icloud.com
  * @module commonJS
- * @require page.less
- * @require page.handlebars
+ * @require pager.less
+ * @require pager.handlebars
  * @require jquery
  */
 
@@ -13,7 +14,7 @@ require('./page.less');
 
 var
   /**
-   * @desc 翻页模块骨架
+   * @desc 初始化必要的dom元素
    */
   base = require('./page.handlebars'),
 
@@ -115,7 +116,7 @@ function endCal(begin, btns, pageLen) {
   if (btns <= pageLen) {
     return btns + begin;
   } else {
-    return pageLen + begin -1;
+    return pageLen + begin - 1;
   }
 }
 
