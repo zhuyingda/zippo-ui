@@ -1,0 +1,36 @@
+.page-box {
+  float: right;
+  margin-right: -9px;
+}
+.page-box .page-wrap {
+  float: left;
+}
+.page-box .page-btn,
+.page-box .page-item {
+  background: #e0e0e0;
+  color: #ffffff;
+  font-size: 12px;
+  font-family: "宋体";
+  float: left;
+  margin-right: 10px;
+  padding: 5px;
+  cursor: pointer;
+}
+.page-box .btn-style {
+  background: #00c9bd;
+}
+.page-box .btn-cur {
+  background: #00c9bd;
+}
+.page-box .prev {
+  background: #00c9bd;
+}
+.page-box .next {
+  background: #00c9bd;
+}
+.page-box.in-first-page .prev {
+  background: #e0e0e0;
+}
+.page-box.in-last-page .next {
+  background: #e0e0e0;
+}
