@@ -4,11 +4,12 @@
  * @version 1.1
  * pager   -   分页
  * @author yingdazhu@icloud.com
+ * @git github.com/zhuyingda/zippo
  * @module UMD
  * @require pager.css
  * @require jquery
  */
-;(function ($, undefined) {
+;(function (window, $, undefined) {
   var
     /**
      * @desc 初始化必要的dom元素
@@ -183,5 +184,9 @@
     }
   };
 
-  window.zp = zp;
-})($);
+  if(window.zp){
+    window.zp = $.extend(window.zp, zp);
+  }else{
+    window.zp = zp;
+  }
+})(window, $);

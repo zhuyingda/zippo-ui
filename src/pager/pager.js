@@ -4,6 +4,7 @@
  * @version 1.1
  * pager   -   分页
  * @author yingdazhu@icloud.com
+ * @git github.com/zhuyingda/zippo
  * @module commonJS
  * @require pager.less
  * @require pager.handlebars
