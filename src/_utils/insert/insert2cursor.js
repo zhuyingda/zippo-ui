@@ -1,7 +1,13 @@
 /**
- * @desc 在textarea中插入字符串
+ * @util
+ * insert2cursor   -   input/textarea内容插入
+ * @module commonJS
+ * @desc 将字符串插入到input/textarea光标所在位置，兼容ie6
+ * @param {elem} field 原生input/textarea标签元素对象
+ * @param {string} val 需要插入的内容
  */
-function insertAtCursor(field, val) {
+
+function index(field, val) {
   if (document.selection) {
     field.focus();
     sel.text = val;
@@ -24,5 +30,5 @@ function insertAtCursor(field, val) {
 }
 
 module.exports = {
-  insertAtCursor: insertAtCursor
+  exec: index
 }

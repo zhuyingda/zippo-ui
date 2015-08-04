@@ -1,3 +1,11 @@
+/**
+ * @util
+ * copy2clipboard   -   将字符串复制到剪贴板
+ * @module commonJS
+ * @desc 将字符串复制到系统剪贴板，兼容ie6，webkit、FF浏览器需要安装插件
+ * @param {string} maintext 需要复制的字符串
+ */
+
 function copyToClipboard(maintext) {
   if (window.clipboardData) {
     window.clipboardData.setData("Text", maintext);

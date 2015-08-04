@@ -2,7 +2,7 @@
  * @util
  * @author zyd
  * @version 1.0
- * lengther   -   字长限制器
+ * truncate   -   字长限制器
  * @author yingdazhu@icloud.com
  * @git github.com/zhuyingda/zippo
  * @module UMD
@@ -50,7 +50,7 @@
   }
 
   var zp = {
-    lengther : index
+    truncate : index
   };
 
   if(window.zp){
