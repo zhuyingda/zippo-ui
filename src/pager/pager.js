@@ -11,13 +11,13 @@
  * @require jquery
  */
 
-require('./page.less');
+require('./pager.less');
 
 var
   /**
-   * @desc 初始化必要的dom元素
+   * @desc 初始化容器dom元素
    */
-  base = require('./page.handlebars'),
+  base = require('./pager_container.handlebars'),
 
   /**
    * @desc 当前所在页（从1开始）
@@ -55,7 +55,7 @@ function setTotal(n) {
 }
 
 /**
- * @desc 翻到第x页
+ * @desc 排列第pageNum页的按钮列表
  */
 function renderPager(pageNum) {
   var
