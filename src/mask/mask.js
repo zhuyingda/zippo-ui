@@ -104,9 +104,9 @@ function close(id, options){
 }
 
 /**
- * @desc 展现一个winbox
+ * @desc 展现一个弹层
  */
-function showWinbox(tpl,options){
+function showMask(tpl,options){
   maskId++;
   var id = 'mask_'+maskId;
   var opt = optionFilter(options);
@@ -139,5 +139,5 @@ function optionFilter(o){
 
 
 module.exports = {
-  showWinbox: showWinbox
+  showMask: showMask
 }
