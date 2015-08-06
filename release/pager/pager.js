@@ -59,33 +59,22 @@
   }
 
   /**
-   * @desc 翻到第x页
+   * @desc 排列第pageNum页的按钮列表
+   * @var begin 当前页从第begin页开始
+   * @var end 当前页的最后一个按钮的页数
+   * @var pageLen 总页数
+   * @var pagerContainer 组件容器
    */
   function renderPager(pageNum) {
     var
-      /**
-       * @desc 当前页从第begin页开始
-       */
       begin,
-      /**
-       * @desc 当前页的最后一个按钮的页数
-       */
       end,
-      /**
-       * @desc 总页数
-       */
       pageLen = Math.ceil(total / itemInPage) + 1,
-      /**
-       * @desc 总页数
-       */
       pagerContainer = $('.page-wrap');
 
     begin = beginCal(pageNum, btnInPage, pageLen);
     end = endCal(begin, btnInPage, pageLen);
 
-    /**
-     * @desc 渲染翻页列表
-     */
     pagerContainer.empty();
     for (var i = begin; i < end; i++) {
       pagerContainer.append('<div class="page-item">' + i + '</div>');
