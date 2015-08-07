@@ -73,7 +73,7 @@ function renderPager(pageNum) {
 
   pagerContainer.empty();
   for (var i = begin; i < end; i++) {
-    pagerContainer.append('<div class="page-item">' + i + '</div>');
+    pagerContainer.append('<div class="page-item"> style="float: left;cursor: pointer;"' + i + '</div>');
   }
   for (i = 0; i < $('.page-item').length; i++) {
     if (pageNum == $('.page-item').eq(i).html()) {
