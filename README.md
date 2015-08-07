@@ -7,7 +7,7 @@ Component-Mask Usage
 var zippo = require('zippo-ui');
 
 when you wanna create a mask and view something, you can put your HTML templates and options like this:
-var w = zippo.mask.showMask('<div style="background: #fff;"><p>this is a test info line</p><p>this is also a test line!</p></div>',{animation:'fade'});
+var w = zippo.mask.showMask('<xxx>your HTML code</xxx>',{animation:'fade'});
 
 when you wanna shake it, try this:
 w.shake();
