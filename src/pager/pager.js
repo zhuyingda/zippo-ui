@@ -11,7 +11,7 @@
  * @require jquery
  */
 
-require('./pager.less');
+//require('./pager.less');
 
 var
   /**

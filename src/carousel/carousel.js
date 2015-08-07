@@ -1,4 +1,4 @@
-require('./like.less');
+//require('./like.less');
 
 var
   /**
