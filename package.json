@@ -1,29 +1,32 @@
 {
   "name": "zippo",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "a javascript library",
   "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "gulp-less": "^3.0.3",
+    "webpack": "^1.10.5",
+    "jquery": "^2.1.4",
+    "gulp": "^3.9.0"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "zhuyingda",
-  "license": "ISC",
-  "homepage": "https://github.com/zhuyingda/zippo",
-  "keywords": [
-    "widget", "util"
-  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/zhuyingda/zippo"
+    "url": "git+https://github.com/zhuyingda/zippo.git"
   },
-  "dependencies": {
-    "gulp": "^3.9.0",
-    "jquery": "^2.1.4"
-  },
-  "devDependencies": {
-    "webpack": "^1.10.5"
-  },
+  "keywords": [
+    "widget"
+  ],
+  "author": "zhuyingda",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/zhuyingda/zippo/issues"
-  }
+  },
+  "homepage": "https://github.com/zhuyingda/zippo#readme"
 }
