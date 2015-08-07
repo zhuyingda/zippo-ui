@@ -4,7 +4,7 @@
  * @version 1.0
  * pager   -   弹层
  * @author yingdazhu@icloud.com
- * @git github.com/zhuyingda/zippo
+ * @git github.com/zhuyingda/zippo-ui
  * @module commonJS
  * @require jquery
  */
@@ -28,13 +28,17 @@ var
   /**
    * @desc 弹层管理器
    */
-  manager = [];
+  manager = {};
 
 /**
  * @desc 抖动
  */
 function shake(id) {
-  var layer = $('#'+id+' .tpl_wrapper');
+  if(manager['mask_'+id].lock){
+    return;
+  }
+  manager['mask_'+id].lock = true;
+  var layer = $('#' + id + ' .tpl_wrapper');
   var curPos = parseInt(layer.css('left'));
   var freq = 50;
   var swing = 5;
@@ -48,6 +52,7 @@ function shake(id) {
         layer.animate({left: curPos + 'px'}, freq / 2);
         if (swing == 0) {
           clearInterval(t);
+          manager['mask_'+id].lock = false;
         }
       });
     });
@@ -57,31 +62,31 @@ function shake(id) {
 /**
  * @desc 初始化
  */
-function init(tpl, options, id){
+function init(tpl, options, id) {
   baseLevel++;
   var html =
-    '<div id="mask_' +maskId+ '" '+
+    '<div id="mask_' + maskId + '" ' +
     'style="display: none;' +
     'position: absolute; ' +
     'top: 0px;' +
     'left: 0px; ' +
-    'z-index: ' +baseLevel+';'+
+    'z-index: ' + baseLevel + ';' +
     'width: 100%;' +
-    'height: 100%;">'+maskLayer+
+    'height: 100%;">' + maskLayer +
     '<div class="tpl_wrapper" style="position: absolute;' +
     'z-index: 200;' +
     'left: 50%;' +
-    'top: 50%;">'+tpl.trim()+
+    'top: 50%;">' + tpl.trim() +
     '</div></div>';
   $('body').append(html);
-  if(!options.top){
-    $('#'+id).css({
-      'margin-top': $('.tpl_wrapper').height()/2
+  if (!options.top) {
+    $('#' + id).css({
+      'margin-top': $('.tpl_wrapper').height() / 2
     });
   }
-  if(!options.left){
-    $('#'+id).css({
-      'margin-left': $('.tpl_wrapper').width()/2
+  if (!options.left) {
+    $('#' + id).css({
+      'margin-left': $('.tpl_wrapper').width() / 2
     });
   }
 }
@@ -89,40 +94,46 @@ function init(tpl, options, id){
 /**
  * @desc 关闭
  */
-function close(id, options){
-  var layerWrap = $('#'+id);
-  if(!options.hasAnimation){
+function close(id, options) {
+  var layerWrap = $('#' + id);
+  if (!options.hasAnimation) {
     layerWrap.hide();
     layerWrap.remove();
   }
-  if(options.animation == 'fade'){
+  if (options.animation == 'fade') {
     layerWrap.fadeOut(400, function () {
       layerWrap.remove();
     });
   }
   baseLevel--;
+  manager['mask_'+id] = null;
+  manager['mask_'+id] = undefined;
 }
 
 /**
  * @desc 展现一个弹层
  */
-function showMask(tpl,options){
+function showMask(tpl, options) {
   maskId++;
-  var id = 'mask_'+maskId;
+  var id = 'mask_' + maskId;
   var opt = optionFilter(options);
   init(tpl, opt, id);
-  var layerWrap = $('#'+id);
-  if(!opt.hasAnimation){
+  var layerWrap = $('#' + id);
+  manager[id] = {
+    $dom: layerWrap,
+    lock: false
+  };
+  if (!opt.hasAnimation) {
     layerWrap.show();
   }
-  if(options.animation == 'fade'){
+  if (options.animation == 'fade') {
     layerWrap.fadeIn();
   }
   return {
-    'shake': function(){
+    'shake': function () {
       shake(id);
     },
-    'close': function(){
+    'close': function () {
       close(id, options);
     }
   }
@@ -131,13 +142,17 @@ function showMask(tpl,options){
 /**
  * @desc 过滤器
  */
-function optionFilter(o){
+function optionFilter(o) {
   var opt = {};
-  opt.hasAnimation = o.animation? true: false;
-  return $.extend(o,opt);
+  opt.hasAnimation = o.animation ? true : false;
+  return $.extend(o, opt);
 }
 
+function maskList() {
+  return manager;
+}
 
 module.exports = {
-  showMask: showMask
+  showMask: showMask,
+  maskList: maskList
 }

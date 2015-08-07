@@ -1,0 +1,52 @@
+{
+  "name": "thor",
+  "version": "0.0.0",
+  "description": "the front-end project of mmlive",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "fe",
+    "thor"
+  ],
+  "author": "xingyan",
+  "license": "ISC",
+  "dependencies": {
+    "browser-sync": "^2.8.0",
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-cdn-image": "0.0.6",
+    "gulp-changed": "^1.2.1",
+    "gulp-csso": "^1.0.0",
+    "gulp-g-require-css": "0.0.5",
+    "gulp-if": "^1.2.5",
+    "gulp-md5-path": "0.0.2",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace-md5-image": "0.0.7",
+    "gulp-sequence": "^0.3.2",
+    "gulp-useref": "^1.2.0",
+    "gulp-util": "^3.0.6",
+    "gulp-watch": "^4.2.4",
+    "gulp-x-deploy": "0.0.0",
+    "handlebars": "^3.0.3",
+    "handlebars-loader": "^1.0.2",
+    "minimist": "^1.1.1",
+    "node-libs-browser": "^0.5.2",
+    "require-dir": "^0.3.0",
+    "webpack": "^1.9.10"
+  },
+  "devDependencies": {
+    "asyncrequest": "0.0.6",
+    "gulp-g-deploy": "^1.0.1",
+    "gulp-gzip": "^1.1.0",
+    "gulp-spritesmith": "0.0.2",
+    "gulp-tar": "^1.4.0",
+    "jquery": "1.9.1",
+    "pc-game-scrollbar": "0.0.4",
+    "pc-game-util": "0.0.5",
+    "pc-load-x-game": "0.0.5",
+    "swfember": "0.0.1"
+  }
+}
