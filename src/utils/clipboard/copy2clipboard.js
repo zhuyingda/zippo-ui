@@ -36,5 +36,5 @@ function copyToClipboard(maintext) {
 }
 
 module.exports = {
-  copyToClipboard: copyToClipboard
+  exec: copyToClipboard
 }

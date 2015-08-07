@@ -1,16 +1,12 @@
 {
-  "name": "thor",
+  "name": "zippo-ui-test",
   "version": "0.0.0",
-  "description": "the front-end project of mmlive",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "the test of zippo-ui prj",
   "keywords": [
-    "fe",
-    "thor"
+    "test",
+    "zippo"
   ],
-  "author": "xingyan",
+  "author": "zhuyingda",
   "license": "ISC",
   "dependencies": {
     "browser-sync": "^2.8.0",
@@ -47,6 +43,7 @@
     "pc-game-scrollbar": "0.0.4",
     "pc-game-util": "0.0.5",
     "pc-load-x-game": "0.0.5",
-    "swfember": "0.0.1"
+    "swfember": "0.0.1",
+    "zippo-ui": "^1.0.9"
   }
 }

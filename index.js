@@ -8,7 +8,7 @@ module.exports = {
   mask: require('./src/mask/mask'),
   util: {
     truncate: require('./src/utils/truncate/truncate'),
-    insert: require('./sec/utils/insert/insert2cursor'),
-    clip: require('./sec/utils/clipboard/copy2clipboard')
+    insert: require('./src/utils/insert/insert2cursor'),
+    clip: require('./src/utils/clipboard/copy2clipboard')
   }
 }

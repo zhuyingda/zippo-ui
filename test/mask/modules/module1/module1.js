@@ -1,19 +1,23 @@
 require('./module1.less');
 
-var mask = require('zippo-ui').mask;
+var mask = require('../../../../../index').mask;
 var tpl = require('./dialog.handlebars');
 
 function index(){
-  var m;
+  var maskStack = [];
   $('#btn_show').click(function () {
-    m = mask.showMask(tpl(),{animation:'fade'});
+    var m = mask.showMask(tpl(),{animation:'fade'});
+    maskStack.push(m);
   });
   $('#btn_shake').click(function () {
+    var m = maskStack.pop();
     m.shake();
+    maskStack.push(m);
   });
   $('#btn_close').click(function () {
+    var m = maskStack.pop();
     m.close();
-  })
+  });
 }
 
 module.exports = {

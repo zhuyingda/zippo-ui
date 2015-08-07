@@ -16,7 +16,7 @@ webpackJsonp([0,1],[
 	  md1 = __webpack_require__(2),
 	
 	  
-	  md2 = __webpack_require__(17);
+	  md2 = __webpack_require__(18);
 	
 	md1.md1();
 
@@ -28,19 +28,23 @@ webpackJsonp([0,1],[
 	
 	
 	var mask = __webpack_require__(3).mask;
-	var tpl = __webpack_require__(16);
+	var tpl = __webpack_require__(9);
 	
 	function index(){
-	  var m;
+	  var maskStack = [];
 	  $('#btn_show').click(function () {
-	    m = mask.showMask(tpl(),{animation:'fade'});
+	    var m = mask.showMask(tpl(),{animation:'fade'});
+	    maskStack.push(m);
 	  });
 	  $('#btn_shake').click(function () {
+	    var m = maskStack.pop();
 	    m.shake();
+	    maskStack.push(m);
 	  });
 	  $('#btn_close').click(function () {
+	    var m = maskStack.pop();
 	    m.close();
-	  })
+	  });
 	}
 	
 	module.exports = {
@@ -53,18 +57,22 @@ webpackJsonp([0,1],[
 
 	/**
 	 * @author zhuyingda
-	 * @type {{pager: {widget}, mask: {widget}, truncate: {util}}}
+	 * @type {{pager: {widget}, mask: {widget}, truncate: {util}, insert: {util}, clip: {util}}}
 	 */
 	
 	module.exports = {
 	  pager: __webpack_require__(4),
-	  mask: __webpack_require__(14),
-	  truncate: __webpack_require__(15)
+	  mask: __webpack_require__(5),
+	  util: {
+	    truncate: __webpack_require__(6),
+	    insert: __webpack_require__(7),
+	    clip: __webpack_require__(8)
+	  }
 	}
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/**
 	 * @widget
@@ -72,7 +80,7 @@ webpackJsonp([0,1],[
 	 * @version 1.1
 	 * pager   -   分页
 	 * @author yingdazhu@icloud.com
-	 * @git github.com/zhuyingda/zippo
+	 * @git github.com/zhuyingda/zippo-ui
 	 * @module commonJS
 	 * @require pager.less
 	 * @require pager.handlebars
@@ -85,7 +93,8 @@ webpackJsonp([0,1],[
 	  /**
 	   * @desc 初始化容器dom元素
 	   */
-	  base = __webpack_require__(5),
+	  //base = require('./pager_container.handlebars'),
+	  base = '<div class="page-box clearfix"><div class="page-btn btn-style prev" style="float: left;">上一页</div><div class="page-wrap" style="float: left;"></div><div class="page-btn btn-style next" style="float: left;">下一页</div></div>',
 	
 	  /**
 	   * @desc 当前所在页（从1开始）
@@ -237,24 +246,334 @@ webpackJsonp([0,1],[
 
 /***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var Handlebars = __webpack_require__(6);
-	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-	    return "<div class=\"page-box clearfix\">\r\n    <div class=\"page-btn btn-style prev\" style=\"float: left;\">上一页</div>\r\n    <div class=\"page-wrap\" style=\"float: left;\">\r\n\r\n    </div>\r\n    <div class=\"page-btn btn-style next\" style=\"float: left;\">下一页</div>\r\n</div>";
-	},"useData":true});
+	/**
+	 * @widget
+	 * @author zyd
+	 * @version 1.0
+	 * pager   -   弹层
+	 * @author yingdazhu@icloud.com
+	 * @git github.com/zhuyingda/zippo-ui
+	 * @module commonJS
+	 * @require jquery
+	 */
+	
+	var
+	  /**
+	   * @desc 弹层遮罩
+	   */
+	  maskLayer = '<div style="width:100%;height:100%;position:absolute;left:0;top:0;background:#000;opacity:0.4;filter:alpha(opacity=40);z-index:100;"><iframe src="about:blank" style="z-index:-1;width:100%;height:100%" allowtransparency="true" frameborder=0></iframe></div>',
+	
+	  /**
+	   * @desc 当前弹层层级
+	   */
+	  baseLevel = 10000,
+	
+	  /**
+	   * @desc 当前弹层层级
+	   */
+	  maskId = 0,
+	
+	  /**
+	   * @desc 弹层管理器
+	   */
+	  manager = {};
+	
+	/**
+	 * @desc 初始化
+	 */
+	function init(tpl, options, id) {
+	  baseLevel++;
+	  var html =
+	    '<div id="mask_' + maskId + '" ' +
+	    'style="visibility: hidden;' +
+	    'position: absolute; ' +
+	    'top: 0px;' +
+	    'left: 0px; ' +
+	    'z-index: ' + baseLevel + ';' +
+	    'width: 100%;' +
+	    'height: 100%;">' + maskLayer +
+	    '<div class="tpl_wrapper" style="position: absolute;' +
+	    'z-index: 200;' +
+	    'left: 50%;' +
+	    'top: 50%;">' + tpl.trim() +
+	    '</div></div>';
+	  $('body').append(html);
+	}
+	
+	/**
+	 * @desc 抖动
+	 */
+	function shake(id) {
+	  if (manager[id].lock) {
+	    return;
+	  }
+	  manager[id].lock = true;
+	  var layer = $('#' + id + ' .tpl_wrapper');
+	  var curPos = parseInt(layer.css('left'));
+	  var freq = 50;
+	  var swing = 5;
+	  var t = setInterval(function () {
+	    curPos += swing;
+	    layer.animate({left: curPos + 'px'}, freq / 4, 'swing', function () {
+	      curPos -= swing * 2;
+	      layer.animate({left: curPos + 'px'}, freq / 2, 'swing', function () {
+	        curPos += swing;
+	        swing--;
+	        layer.animate({left: curPos + 'px'}, freq / 2);
+	        if (swing == 0) {
+	          clearInterval(t);
+	          manager[id].lock = false;
+	        }
+	      });
+	    });
+	  }, freq + 20);
+	}
+	
+	/**
+	 * @desc 关闭
+	 */
+	function close(id, options) {
+	  var layerWrap = $('#' + id);
+	  if (!options.hasAnimation) {
+	    layerWrap.hide();
+	    layerWrap.remove();
+	  }
+	  if (options.animation == 'fade') {
+	    layerWrap.fadeOut(400, function () {
+	      layerWrap.remove();
+	    });
+	  }
+	  baseLevel--;
+	  manager[id] = null;
+	  manager[id] = undefined;
+	}
+	
+	/**
+	 * @desc 展现一个弹层
+	 */
+	function showMask(tpl, options) {
+	  maskId++;
+	  var id = 'mask_' + maskId;
+	  var opt = optionFilter(options);
+	  init(tpl, opt, id);
+	  fixPosition(opt, id);
+	  var layerWrap = $('#' + id);
+	  manager[id] = {
+	    $dom: layerWrap,
+	    lock: false
+	  };
+	  if (!opt.hasAnimation) {
+	    layerWrap.show();
+	  }
+	  if (opt.animation == 'fade') {
+	    layerWrap.fadeIn();
+	  }
+	  return {
+	    'shake': function () {
+	      shake(id);
+	    },
+	    'close': function () {
+	      close(id, options);
+	    }
+	  }
+	}
+	
+	function fixPosition(options, id){
+	  if (!options.top) {
+	    $('#' + id + ' .tpl_wrapper').css({
+	      'margin-top': '-' + $('.tpl_wrapper').height() / 2 + 'px'
+	    });
+	  }
+	  if (!options.left) {
+	    $('#' + id + ' .tpl_wrapper').css({
+	      'margin-left': '-' + $('.tpl_wrapper').width() / 2 + 'px'
+	    });
+	  }
+	  $('#' + id).css({display:'none',visibility:'inherit'})
+	}
+	
+	/**
+	 * @desc 过滤器
+	 */
+	function optionFilter(o) {
+	  var opt = {};
+	  opt.hasAnimation = o.animation ? true : false;
+	  return $.extend(o, opt);
+	}
+	
+	function maskList() {
+	  return manager;
+	}
+	
+	module.exports = {
+	  showMask: showMask,
+	  maskList: maskList
+	}
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	/**
+	 * @util
+	 * @author zyd
+	 * @version 1.0
+	 * truncate   -   字长限制器
+	 * @author yingdazhu@icloud.com
+	 * @git github.com/zhuyingda/zippo
+	 * @module commonJS
+	 * @desc 根据配置识别中英文，按长度截取字符串，兼容ie6
+	 * @param {string} str 待切割字符
+	 * @param {number} len 长度限制，以英文或半角符号为1个单位长度，中文占2个
+	 */
+	
+	function index(str, len) {
+	  str = isStr(str);
+	  var weight = 0,
+	    tmp = '',
+	    i=0;
+	  while(weight <= len && i < str.length){
+	    tmp += str.charAt(i);
+	    if(isZh(str.charAt(i))){
+	      weight += 2;
+	    }else{
+	      weight += 1;
+	    }
+	    i++;
+	  }
+	  if(tmp.length < str.length){
+	    tmp += '…';
+	  }
+	  return tmp;
+	}
+	
+	function isStr(str){
+	  if(str == undefined || str == '' || str == null || !str.toString()){
+	    str = '-';
+	  }else{
+	    str = str.toString();
+	  }
+	  return str;
+	}
+	
+	function isZh(token) {
+	  if(token.charCodeAt(0) > 128){
+	    return true;
+	  }else{
+	    return false;
+	  }
+	}
+	
+	module.exports = {
+	  exec: index
+	}
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	/**
+	 * @util
+	 * insert2cursor   -   input/textarea内容插入
+	 * @module commonJS
+	 * @desc 将字符串插入到input/textarea光标所在位置，兼容ie6
+	 * @param {elem} field 原生input/textarea标签元素对象
+	 * @param {string} val 需要插入的内容
+	 */
+	
+	function index(field, val) {
+	  if (document.selection) {
+	    field.focus();
+	    sel.text = val;
+	    sel.select();
+	  } else if (field.selectionStart || field.selectionStart == '0') {
+	    var startPos = field.selectionStart;
+	    var endPos = field.selectionEnd;
+	    var restoreTop = field.scrollTop;
+	    field.value = field.value.substring(0, startPos) + val + field.value.substring(endPos, field.value.length);
+	    if (restoreTop > 0) {
+	      field.scrollTop = restoreTop;
+	    }
+	    field.focus();
+	    field.selectionStart = startPos + val.length;
+	    field.selectionEnd = startPos + val.length;
+	  } else {
+	    field.value += val;
+	    field.focus();
+	  }
+	}
+	
+	module.exports = {
+	  exec: index
+	}
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	/**
+	 * @util
+	 * copy2clipboard   -   将字符串复制到剪贴板
+	 * @module commonJS
+	 * @desc 将字符串复制到系统剪贴板，兼容ie6，webkit、FF浏览器需要安装插件
+	 * @param {string} maintext 需要复制的字符串
+	 */
+	
+	function copyToClipboard(maintext) {
+	  if (window.clipboardData) {
+	    window.clipboardData.setData("Text", maintext);
+	  } else if (window.netscape) {
+	    try {
+	      netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+	    } catch (e) {
+	      alert("该浏览器不支持一键复制！\n请手工复制文本框链接地址～");
+	    }
+	
+	    var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+	    if (!clip) return;
+	    var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+	    if (!trans) return;
+	    trans.addDataFlavor('text/unicode');
+	    var str = new Object();
+	    var len = new Object();
+	    var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+	    var copytext = maintext;
+	    str.data = copytext;
+	    trans.setTransferData("text/unicode", str, copytext.length * 2);
+	    var clipid = Components.interfaces.nsIClipboard;
+	    if (!clip) return false;
+	    clip.setData(trans, null, clipid.kGlobalClipboard);
+	    alert("以下内容已经复制到剪贴板\n\n" + maintext);
+	  }
+	  alert("该浏览器不支持一键复制！\n请手工复制文本框链接地址～");
+	}
+	
+	module.exports = {
+	  exec: copyToClipboard
+	}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(10);
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+	    return "<div class=\"dialog\">\n    <h1>这是一个测试的弹层，请叫我标题</h1>\n    <p>这是测试弹层的内容</p>\n    <p>想看点好玩的特效吗，点抖个骚试试？</p>\n</div>";
+	},"useData":true});
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Create a simple path alias to allow browserify to resolve
 	// the runtime on a supported path.
-	module.exports = __webpack_require__(7)['default'];
+	module.exports = __webpack_require__(11)['default'];
 
 
 /***/ },
-/* 7 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -263,30 +582,30 @@ webpackJsonp([0,1],[
 	
 	exports.__esModule = true;
 	
-	var _import = __webpack_require__(8);
+	var _import = __webpack_require__(12);
 	
 	var base = _interopRequireWildcard(_import);
 	
 	// Each of these augment the Handlebars object. No need to setup here.
 	// (This is done to easily share code between commonjs and browse envs)
 	
-	var _SafeString = __webpack_require__(11);
+	var _SafeString = __webpack_require__(15);
 	
 	var _SafeString2 = _interopRequireWildcard(_SafeString);
 	
-	var _Exception = __webpack_require__(10);
+	var _Exception = __webpack_require__(14);
 	
 	var _Exception2 = _interopRequireWildcard(_Exception);
 	
-	var _import2 = __webpack_require__(9);
+	var _import2 = __webpack_require__(13);
 	
 	var Utils = _interopRequireWildcard(_import2);
 	
-	var _import3 = __webpack_require__(12);
+	var _import3 = __webpack_require__(16);
 	
 	var runtime = _interopRequireWildcard(_import3);
 	
-	var _noConflict = __webpack_require__(13);
+	var _noConflict = __webpack_require__(17);
 	
 	var _noConflict2 = _interopRequireWildcard(_noConflict);
 	
@@ -319,7 +638,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 8 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -330,11 +649,11 @@ webpackJsonp([0,1],[
 	exports.HandlebarsEnvironment = HandlebarsEnvironment;
 	exports.createFrame = createFrame;
 	
-	var _import = __webpack_require__(9);
+	var _import = __webpack_require__(13);
 	
 	var Utils = _interopRequireWildcard(_import);
 	
-	var _Exception = __webpack_require__(10);
+	var _Exception = __webpack_require__(14);
 	
 	var _Exception2 = _interopRequireWildcard(_Exception);
 	
@@ -597,7 +916,7 @@ webpackJsonp([0,1],[
 	/* [args, ]options */
 
 /***/ },
-/* 9 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -716,7 +1035,7 @@ webpackJsonp([0,1],[
 	}
 
 /***/ },
-/* 10 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -759,7 +1078,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 11 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -778,7 +1097,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -796,15 +1115,15 @@ webpackJsonp([0,1],[
 	exports.invokePartial = invokePartial;
 	exports.noop = noop;
 	
-	var _import = __webpack_require__(9);
+	var _import = __webpack_require__(13);
 	
 	var Utils = _interopRequireWildcard(_import);
 	
-	var _Exception = __webpack_require__(10);
+	var _Exception = __webpack_require__(14);
 	
 	var _Exception2 = _interopRequireWildcard(_Exception);
 	
-	var _COMPILER_REVISION$REVISION_CHANGES$createFrame = __webpack_require__(8);
+	var _COMPILER_REVISION$REVISION_CHANGES$createFrame = __webpack_require__(12);
 	
 	function checkRevision(compilerInfo) {
 	  var compilerRevision = compilerInfo && compilerInfo[0] || 1,
@@ -1015,7 +1334,7 @@ webpackJsonp([0,1],[
 	}
 
 /***/ },
-/* 13 */
+/* 17 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -1039,228 +1358,7 @@ webpackJsonp([0,1],[
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	/**
-	 * @widget
-	 * @author zyd
-	 * @version 1.0
-	 * pager   -   弹层
-	 * @author yingdazhu@icloud.com
-	 * @git github.com/zhuyingda/zippo
-	 * @module commonJS
-	 * @require jquery
-	 */
-	
-	var
-	  /**
-	   * @desc 弹层遮罩
-	   */
-	  maskLayer = '<div style="width:100%;height:100%;position:absolute;left:0;top:0;background:#000;opacity:0.4;filter:alpha(opacity=40);z-index:100;"><iframe src="about:blank" style="z-index:-1;width:100%;height:100%" allowtransparency="true" frameborder=0></iframe></div>',
-	
-	  /**
-	   * @desc 当前弹层层级
-	   */
-	  baseLevel = 10000,
-	
-	  /**
-	   * @desc 当前弹层层级
-	   */
-	  maskId = 0,
-	
-	  /**
-	   * @desc 弹层管理器
-	   */
-	  manager = [];
-	
-	/**
-	 * @desc 抖动
-	 */
-	function shake(id) {
-	  var layer = $('#' + id + ' .tpl_wrapper');
-	  var curPos = parseInt(layer.css('left'));
-	  var freq = 50;
-	  var swing = 5;
-	  var t = setInterval(function () {
-	    curPos += swing;
-	    layer.animate({left: curPos + 'px'}, freq / 4, 'swing', function () {
-	      curPos -= swing * 2;
-	      layer.animate({left: curPos + 'px'}, freq / 2, 'swing', function () {
-	        curPos += swing;
-	        swing--;
-	        layer.animate({left: curPos + 'px'}, freq / 2);
-	        if (swing == 0) {
-	          clearInterval(t);
-	        }
-	      });
-	    });
-	  }, freq + 20);
-	}
-	
-	/**
-	 * @desc 初始化
-	 */
-	function init(tpl, options, id) {
-	  baseLevel++;
-	  var html =
-	    '<div id="mask_' + maskId + '" ' +
-	    'style="display: none;' +
-	    'position: absolute; ' +
-	    'top: 0px;' +
-	    'left: 0px; ' +
-	    'z-index: ' + baseLevel + ';' +
-	    'width: 100%;' +
-	    'height: 100%;">' + maskLayer +
-	    '<div class="tpl_wrapper" style="position: absolute;' +
-	    'z-index: 200;' +
-	    'left: 50%;' +
-	    'top: 50%;">' + tpl.trim() +
-	    '</div></div>';
-	  $('body').append(html);
-	  if (!options.top) {
-	    $('#' + id).css({
-	      'margin-top': $('.tpl_wrapper').height() / 2
-	    });
-	  }
-	  if (!options.left) {
-	    $('#' + id).css({
-	      'margin-left': $('.tpl_wrapper').width() / 2
-	    });
-	  }
-	}
-	
-	/**
-	 * @desc 关闭
-	 */
-	function close(id, options) {
-	  var layerWrap = $('#' + id);
-	  if (!options.hasAnimation) {
-	    layerWrap.hide();
-	    layerWrap.remove();
-	  }
-	  if (options.animation == 'fade') {
-	    layerWrap.fadeOut(400, function () {
-	      layerWrap.remove();
-	    });
-	  }
-	  baseLevel--;
-	  manager.pop();
-	}
-	
-	/**
-	 * @desc 展现一个弹层
-	 */
-	function showMask(tpl, options) {
-	  maskId++;
-	  var id = 'mask_' + maskId;
-	  var opt = optionFilter(options);
-	  init(tpl, opt, id);
-	  var layerWrap = $('#' + id);
-	  manager.push(layerWrap);
-	  if (!opt.hasAnimation) {
-	    layerWrap.show();
-	  }
-	  if (options.animation == 'fade') {
-	    layerWrap.fadeIn();
-	  }
-	  return {
-	    'shake': function () {
-	      shake(id);
-	    },
-	    'close': function () {
-	      close(id, options);
-	    }
-	  }
-	}
-	
-	/**
-	 * @desc 过滤器
-	 */
-	function optionFilter(o) {
-	  var opt = {};
-	  opt.hasAnimation = o.animation ? true : false;
-	  return $.extend(o, opt);
-	}
-	
-	function maskList() {
-	  return manager;
-	}
-	
-	module.exports = {
-	  showMask: showMask,
-	  maskList: maskList
-	}
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	/**
-	 * @util
-	 * @author zyd
-	 * @version 1.0
-	 * truncate   -   字长限制器
-	 * @author yingdazhu@icloud.com
-	 * @git github.com/zhuyingda/zippo
-	 * @module commonJS
-	 * @desc 根据配置识别中英文，按长度截取字符串，兼容ie6
-	 * @param {string} str 待切割字符
-	 * @param {number} len 长度限制，以英文或半角符号为1个单位长度，中文占2个
-	 */
-	
-	function index(str, len) {
-	  str = isStr(str);
-	  var weight = 0,
-	    tmp = '',
-	    i=0;
-	  while(weight <= len && i < str.length){
-	    tmp += str.charAt(i);
-	    if(isZh(str.charAt(i))){
-	      weight += 2;
-	    }else{
-	      weight += 1;
-	    }
-	    i++;
-	  }
-	  if(tmp.length < str.length){
-	    tmp += '…';
-	  }
-	  return tmp;
-	}
-	
-	function isStr(str){
-	  if(str == undefined || str == '' || str == null || !str.toString()){
-	    str = '-';
-	  }else{
-	    str = str.toString();
-	  }
-	  return str;
-	}
-	
-	function isZh(token) {
-	  if(token.charCodeAt(0) > 128){
-	    return true;
-	  }else{
-	    return false;
-	  }
-	}
-	
-	module.exports = {
-	  exec: index
-	}
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Handlebars = __webpack_require__(6);
-	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-	    return "<div class=\"dialog\">\n    <h1>这是一个测试的弹层，请叫我标题</h1>\n    <p>这是测试弹层的内容</p>\n    <p>想看点好玩的特效吗，点抖个骚试试？</p>\n</div>";
-	},"useData":true});
-
-/***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	

@@ -31,13 +31,35 @@ var
   manager = {};
 
 /**
+ * @desc 初始化
+ */
+function init(tpl, options, id) {
+  baseLevel++;
+  var html =
+    '<div id="mask_' + maskId + '" ' +
+    'style="visibility: hidden;' +
+    'position: absolute; ' +
+    'top: 0px;' +
+    'left: 0px; ' +
+    'z-index: ' + baseLevel + ';' +
+    'width: 100%;' +
+    'height: 100%;">' + maskLayer +
+    '<div class="tpl_wrapper" style="position: absolute;' +
+    'z-index: 200;' +
+    'left: 50%;' +
+    'top: 50%;">' + tpl.trim() +
+    '</div></div>';
+  $('body').append(html);
+}
+
+/**
  * @desc 抖动
  */
 function shake(id) {
-  if(manager['mask_'+id].lock){
+  if (manager[id].lock) {
     return;
   }
-  manager['mask_'+id].lock = true;
+  manager[id].lock = true;
   var layer = $('#' + id + ' .tpl_wrapper');
   var curPos = parseInt(layer.css('left'));
   var freq = 50;
@@ -52,43 +74,11 @@ function shake(id) {
         layer.animate({left: curPos + 'px'}, freq / 2);
         if (swing == 0) {
           clearInterval(t);
-          manager['mask_'+id].lock = false;
+          manager[id].lock = false;
         }
       });
     });
   }, freq + 20);
-}
-
-/**
- * @desc 初始化
- */
-function init(tpl, options, id) {
-  baseLevel++;
-  var html =
-    '<div id="mask_' + maskId + '" ' +
-    'style="display: none;' +
-    'position: absolute; ' +
-    'top: 0px;' +
-    'left: 0px; ' +
-    'z-index: ' + baseLevel + ';' +
-    'width: 100%;' +
-    'height: 100%;">' + maskLayer +
-    '<div class="tpl_wrapper" style="position: absolute;' +
-    'z-index: 200;' +
-    'left: 50%;' +
-    'top: 50%;">' + tpl.trim() +
-    '</div></div>';
-  $('body').append(html);
-  if (!options.top) {
-    $('#' + id).css({
-      'margin-top': $('.tpl_wrapper').height() / 2
-    });
-  }
-  if (!options.left) {
-    $('#' + id).css({
-      'margin-left': $('.tpl_wrapper').width() / 2
-    });
-  }
 }
 
 /**
@@ -106,8 +96,8 @@ function close(id, options) {
     });
   }
   baseLevel--;
-  manager['mask_'+id] = null;
-  manager['mask_'+id] = undefined;
+  manager[id] = null;
+  manager[id] = undefined;
 }
 
 /**
@@ -118,6 +108,7 @@ function showMask(tpl, options) {
   var id = 'mask_' + maskId;
   var opt = optionFilter(options);
   init(tpl, opt, id);
+  fixPosition(opt, id);
   var layerWrap = $('#' + id);
   manager[id] = {
     $dom: layerWrap,
@@ -126,7 +117,7 @@ function showMask(tpl, options) {
   if (!opt.hasAnimation) {
     layerWrap.show();
   }
-  if (options.animation == 'fade') {
+  if (opt.animation == 'fade') {
     layerWrap.fadeIn();
   }
   return {
@@ -137,6 +128,20 @@ function showMask(tpl, options) {
       close(id, options);
     }
   }
+}
+
+function fixPosition(options, id){
+  if (!options.top) {
+    $('#' + id + ' .tpl_wrapper').css({
+      'margin-top': '-' + $('.tpl_wrapper').height() / 2 + 'px'
+    });
+  }
+  if (!options.left) {
+    $('#' + id + ' .tpl_wrapper').css({
+      'margin-left': '-' + $('.tpl_wrapper').width() / 2 + 'px'
+    });
+  }
+  $('#' + id).css({display:'none',visibility:'inherit'})
 }
 
 /**
