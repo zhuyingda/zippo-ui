@@ -1,6 +1,12 @@
 zippo-ui — a developing JavaScript ui library
 ==================================================
 
+Install
+--------------------------------------
+```bash
+npm install zippo-ui
+```
+
 Component-Mask Usage
 --------------------------------------
 ```bash
