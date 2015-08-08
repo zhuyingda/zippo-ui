@@ -6,10 +6,11 @@ What is zippo-ui?
 --------------------------------------
 It is a web UI library of Javascript which provides a lot of individual components you may need in your daily web developing.
 There is although a few problem in this function lib, but what I can promise is :
-1 this library will never ignore the ie6 problems in PC web components;
-2 as far as I can do for upward-compatible with future nx release versions;
-3 every component has a unit test if you wanna see it;
-4 most importantly, you can always contact me from e-mail or github issues for any problems you meet.
+
+- this library will never ignore the ie6 problems in PC web components;
+- as far as I can do for upward-compatible with future nx release versions;
+- every component has a unit test if you wanna see it;
+- most importantly, you can always contact me from e-mail or github issues for any problems you meet.
 
 
 Install
