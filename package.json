@@ -1,7 +1,7 @@
 {
   "name": "zippo-ui",
-  "version": "1.0.11",
-  "description": "a javascript library",
+  "version": "1.0.12",
+  "description": "a javascript ui library",
   "main": "index.js",
   "directories": {
     "example": "example"

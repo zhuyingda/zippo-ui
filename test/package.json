@@ -44,6 +44,6 @@
     "pc-game-util": "0.0.5",
     "pc-load-x-game": "0.0.5",
     "swfember": "0.0.1",
-    "zippo-ui": "^1.0.9"
+    "zippo-ui": "^1.0.11"
   }
 }

@@ -18,8 +18,10 @@ var
    * @desc 初始化容器dom元素
    */
   //base = require('./pager_container.handlebars'),
-  base = '<div class="page-box clearfix"><div class="page-btn btn-style prev" style="float: left;">上一页</div><div class="page-wrap" style="float: left;"></div><div class="page-btn btn-style next" style="float: left;">下一页</div></div>',
-
+  base = function(){
+    var str = '<div class="page-box clearfix"><div class="page-btn btn-style prev" style="float: left;">上一页</div><div class="page-wrap" style="float: left;"></div><div class="page-btn btn-style next" style="float: left;">下一页</div></div>';
+    return str;
+  },
   /**
    * @desc 当前所在页（从1开始）
    */
@@ -52,7 +54,7 @@ function getCurPage() {
  */
 function setTotal(n) {
   total = n;
-  renderPager(curPage);
+  core(curPage);
 }
 
 /**
@@ -62,18 +64,18 @@ function setTotal(n) {
  * @var pageLen 总页数
  * @var pagerContainer 组件容器
  */
-function renderPager(pageNum) {
+function core(pageNum) {
   var
     begin,
     end,
-    pageLen = Math.ceil(total / itemInPage) + 1,
+    pageLen = Math.ceil(total / itemInPage),
     pagerContainer = $('.page-wrap');
 
   begin = beginCal(pageNum, btnInPage, pageLen);
   end = endCal(begin, btnInPage, pageLen);
 
   pagerContainer.empty();
-  for (var i = begin; i < end; i++) {
+  for (var i = begin; i <= end; i++) {
     pagerContainer.append('<div class="page-item" style="float: left;cursor: pointer;">' + i + '</div>');
   }
   for (i = 0; i < $('.page-item').length; i++) {
@@ -87,27 +89,32 @@ function renderPager(pageNum) {
 }
 
 /**
- * @desc 计算当前页翻页按钮列表的起始位和末位
+ * @desc 计算当前页翻页按钮列表的起始位
  */
 function beginCal(pageNum, btns, pageLen) {
-  if (pageNum <= Math.round(btns / 2)) {
+  var mid = Math.round(btns / 2),
+    rest = Math.abs(pageLen - pageNum);
+  if (pageNum <= mid) {
     return 1;
-  } else if (pageNum > Math.round(btns / 2) && Math.abs((pageLen - 1) - pageNum) >= Math.round(btns / 2)) {
-    return pageNum - Math.round(btns / 2) + 1;
-  } else if (Math.abs((pageLen - 1) - pageNum) < Math.round(btns / 2)) {
+  } else if (pageNum > mid && rest >= mid) {
+    return pageNum - mid + 1;
+  } else if (rest < mid) {
     if (pageLen > btns) {
-      return pageLen - btns;
+      return pageLen - (btns-1);
     } else {
       return 1;
     }
   }
 }
 
+/**
+ * @desc 计算当前页翻页按钮列表的起末位
+ */
 function endCal(begin, btns, pageLen) {
   if (btns <= pageLen) {
-    return btns + begin;
+    return btns + begin - 1;
   } else {
-    return pageLen + begin - 1;
+    return pageLen;
   }
 }
 
@@ -117,7 +124,7 @@ function endCal(begin, btns, pageLen) {
 function edgeCheck(pageNum, pageLen) {
   if (pageNum == 1) {
     $('.page-box').addClass('in-first-page').removeClass('in-last-page');
-  } else if (pageNum == pageLen - 1) {
+  } else if (pageNum == pageLen) {
     $('.page-box').addClass('in-last-page').removeClass('in-first-page');
   } else {
     $('.page-box').removeClass('in-first-page in-last-page');
@@ -127,22 +134,22 @@ function edgeCheck(pageNum, pageLen) {
 /**
  * @desc 翻页回调
  */
-function onTurn(func) {
+function onTurn(cb) {
   $('.next').click(function () {
     if (!$('.page-box').hasClass('in-last-page')) {
-      renderPager(++curPage);
-      func(curPage);
+      core(++curPage);
+      cb(curPage);
     }
   });
   $('.prev').click(function () {
     if (!$('.page-box').hasClass('in-first-page')) {
-      renderPager(--curPage);
-      func(curPage);
+      core(--curPage);
+      cb(curPage);
     }
   });
   $('.page-wrap').on('click', '.page-item', function () {
-    renderPager($(this).html());
-    func($(this).html());
+    core($(this).html());
+    cb($(this).html());
   });
 }
 

@@ -1,6 +1,17 @@
 zippo-ui — a developing JavaScript ui library
 ==================================================
 
+
+What is zippo-ui?
+--------------------------------------
+It is a web UI library of Javascript which provides a lot of individual components you may need in your daily web developing.
+There is although a few problem in this function lib, but what I can promise is :
+1 this library will never ignore the ie6 problems in PC web components;
+2 as far as I can do for upward-compatible with future nx release versions;
+3 every component has a unit test if you wanna see it;
+4 most importantly, you can always contact me from e-mail or github issues for any problems you meet.
+
+
 Install
 --------------------------------------
 ```bash
@@ -14,17 +25,23 @@ var zippo = require('zippo-ui');
 ```
 when you wanna create a mask and view something, you can put your HTML templates and options like this:
 ```bash
-var w = zippo.mask.showMask('<xxx>your HTML code</xxx>',{animation:'fade'});
+var m = zippo.mask.showMask('<xxx>your HTML code</xxx>',{animation:'fade'});
 ```
 
 when you wanna shake it, try this:
 ```bash
-w.shake();
+m.shake();
 ```
 
 when you wanna close it, you can do this:
 ```bash
-w.close();
+m.close();
+```
+
+also, you can get all masks by:
+```bash
+var masks = zippo.mask.maskList();
+console.log(masks);
 ```
 
 Component-Pager Usage

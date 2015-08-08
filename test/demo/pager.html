@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="http://s1.qhimg.com/!d383ee34/reset.css">
+    <link rel="stylesheet" href="css/main_pager.css">
+    <style>
+        .page-box {
+            float: left;
+            margin-top: 200px;
+            margin-left: 100px;
+        }
+        .page-box .page-wrap {
+            float: left;
+        }
+        .page-box .page-btn,
+        .page-box .page-item {
+            background: #e0e0e0;
+            color: #ffffff;
+            font-size: 12px;
+            font-family: "宋体";
+            float: left;
+            margin-right: 10px;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .page-box .btn-style {
+            background: #00c9bd;
+        }
+        .page-box .btn-cur {
+            background: #00c9bd;
+        }
+        .page-box .prev {
+            background: #00c9bd;
+        }
+        .page-box .next {
+            background: #00c9bd;
+        }
+        .page-box.in-first-page .prev {
+            background: #e0e0e0;
+        }
+        .page-box.in-last-page .next {
+            background: #e0e0e0;
+        }
+        button {
+            padding: 3px;
+            position: absolute;
+            left: 200px;
+            top: 400px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="pager"></div>
+<button>改变items数量</button>
+<script src="http://s0.qhimg.com/!68df3f33/jquery.js"></script>
+<script src="js/shared_pager.js"></script>
+<script src="js/main_pager.js"></script>
+</body>
+</html>

@@ -28,6 +28,7 @@ webpackJsonp([0,1],[
 	
 	
 	var mask = __webpack_require__(3).mask;
+	
 	var tpl = __webpack_require__(9);
 	
 	function index(){
@@ -35,6 +36,7 @@ webpackJsonp([0,1],[
 	  $('#btn_show').click(function () {
 	    var m = mask.showMask(tpl(),{animation:'fade'});
 	    maskStack.push(m);
+	    console.log(mask.maskList());
 	  });
 	  $('#btn_shake').click(function () {
 	    var m = maskStack.pop();
