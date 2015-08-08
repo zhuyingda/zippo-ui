@@ -5,7 +5,7 @@ function run() {
   pager.init({
     $el: $('#pager'),
     btnInPage: 10,
-    itemInPage: 5,
+    itemInPage: 14,
     onTurn: function (curPage) {
       console.log(curPage);
     }

@@ -61,18 +61,18 @@ function setTotal(n) {
  * @desc 排列第pageNum页的按钮列表
  * @var begin 当前页从第begin页开始
  * @var end 当前页的最后一个按钮的页数
- * @var pageLen 总页数
+ * @var endPageNum 总页数
  * @var pagerContainer 组件容器
  */
 function core(pageNum) {
   var
     begin,
     end,
-    pageLen = Math.ceil(total / itemInPage),
+    endPageNum = Math.ceil(total / itemInPage),
     pagerContainer = $('.page-wrap');
 
-  begin = beginCal(pageNum, btnInPage, pageLen);
-  end = endCal(begin, btnInPage, pageLen);
+  begin = beginCal(pageNum, btnInPage, endPageNum);
+  end = endCal(begin, btnInPage, endPageNum);
 
   pagerContainer.empty();
   for (var i = begin; i <= end; i++) {
@@ -84,23 +84,23 @@ function core(pageNum) {
     }
   }
 
-  edgeCheck(pageNum, pageLen);
+  edgeCheck(pageNum, endPageNum);
   curPage = pageNum;
 }
 
 /**
  * @desc 计算当前页翻页按钮列表的起始位
  */
-function beginCal(pageNum, btns, pageLen) {
+function beginCal(pageNum, btns, endPageNum) {
   var mid = Math.round(btns / 2),
-    rest = Math.abs(pageLen - pageNum);
+    rest = Math.abs(endPageNum - pageNum);
   if (pageNum <= mid) {
     return 1;
   } else if (pageNum > mid && rest >= mid) {
     return pageNum - mid + 1;
   } else if (rest < mid) {
-    if (pageLen > btns) {
-      return pageLen - (btns-1);
+    if (endPageNum > btns) {
+      return endPageNum - (btns-1);
     } else {
       return 1;
     }
@@ -110,21 +110,21 @@ function beginCal(pageNum, btns, pageLen) {
 /**
  * @desc 计算当前页翻页按钮列表的起末位
  */
-function endCal(begin, btns, pageLen) {
-  if (btns <= pageLen) {
+function endCal(begin, btns, endPageNum) {
+  if (btns <= endPageNum) {
     return btns + begin - 1;
   } else {
-    return pageLen;
+    return endPageNum;
   }
 }
 
 /**
  * @desc 按钮样式边界处理
  */
-function edgeCheck(pageNum, pageLen) {
+function edgeCheck(pageNum, endPageNum) {
   if (pageNum == 1) {
     $('.page-box').addClass('in-first-page').removeClass('in-last-page');
-  } else if (pageNum == pageLen) {
+  } else if (pageNum == endPageNum) {
     $('.page-box').addClass('in-last-page').removeClass('in-first-page');
   } else {
     $('.page-box').removeClass('in-first-page in-last-page');

@@ -65,6 +65,18 @@ pager.init({
 });
 ```
 
+you can option the items count or button count in it by:
+```bash
+pager.init({
+    $el : $('#page'),
+    btnInPage: 10,
+    itemInPage: 5,
+    onTurn : function (curPage) {
+      console.log('now the page is:', curPage);
+    }
+});
+```
+
 you can write this style in less or css, in first page or last page component would auto-add the style class:
 ```bash
 .page-box.in-first-page{
