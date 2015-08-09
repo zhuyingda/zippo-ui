@@ -1,80 +1,55 @@
-var options = {
-  $item : $('.like-item'),
-  $list : $('.like-list'),
-  $btnL : $('.btn-left'),
-  $btnR : $('.btn-right'),
-  period : 3000,
-  velocity : 300
-};
-slider(options);
+/**
+ * @widget
+ * @author zyd
+ * @version 1.1.1
+ * slider   -   轮播图
+ * @author yingdazhu@icloud.com
+ * @git github.com/zhuyingda/zippo-ui
+ * @module commonJS
+ * @require jquery
+ */
 
-function slider(opt) {
-  var itemWidth = parseInt(opt.$item.css('width')) + parseInt(opt.$item.css('margin-right')),
-    edgeLeft = '-' + (opt.$item.length - 5) * itemWidth + 'px',
-    interval = null,
-    timeout = null;
-  opt.$list.css({width : opt.$item.length * itemWidth});
-  opt.$btnL.click(turnLeft);
-  opt.$btnR.click(turnRight);
-  $(window).on({'sliderAnimationComplete' : play});
-  opt.$list.mouseenter(stop).mouseleave(play);
+var
+  /**
+   * @desc 动画锁
+   */
+  lock = false,
 
-  //play();
+  /**
+   * @desc 配置
+   */
+  config = {
+    $el: {},
+    autoPlay: true,
+    period: 5000,
+    type: 'slide',
+    clickable: true,
+    api: 'event'
+  },
 
-  function stop() {
-    clearInterval(interval);
-    interval = null;
-    timeout = null;
-  }
+  /**
+   * @desc 资源
+   */
+  res = [],
 
-  function play() {
-    if(interval === null) {
-      timeout = setTimeout(function () {
-        if(interval === null){
-          interval = setInterval(function () {
-            if(edgeLeft == curLeft()){
-              animation('0px');
-              return;
-            }
-            animation(parseInt(curLeft()) - itemWidth + 'px');
-          },opt.period);
+  /**
+   * @desc 主循环
+   */
+  loop = function (cb) {
+    var inter = null,
+      curItem = 0;
+    return {
+      play: function () {
+        if (!res.length) {
+          return;
         }
-      },1000);
+        inter = setInterval(function () {
+          curItem = curItem == res.length - 1 ? 0 : curItem + 1;
+          cb(curItem);
+        }, config.period);
+      },
+      stop: function () {
+        clearInterval(inter);
+      }
     }
-  }
-
-  function turnLeft() {
-    stop();
-    animation(parseInt(curLeft()) + itemWidth + 'px');
-  }
-
-  function turnRight() {
-    stop();
-    animation(parseInt(curLeft()) - itemWidth + 'px');
-  }
-
-  function animation(left) {
-    opt.$list.animate(
-      {left : left},
-      opt.velocity,
-      'swing',
-      edgeCheck
-    );
-  }
-
-  function edgeCheck() {
-    if(curLeft() == '0px') {
-      opt.$btnL.addClass('disable').siblings().removeClass('disable');
-    }else if (curLeft() == edgeLeft){
-      opt.$btnR.addClass('disable').siblings().removeClass('disable');
-    }else{
-      opt.$btnL.removeClass('disable');
-      opt.$btnR.removeClass('disable');
-    }
-    $(window).trigger('sliderAnimationComplete');
-  }
-
-  function curLeft() {
-    return opt.$list.css('left');
-  }
-}
+  };

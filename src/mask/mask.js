@@ -1,7 +1,7 @@
 /**
  * @widget
  * @author zyd
- * @version 1.0
+ * @version 1.1.1
  * pager   -   弹层
  * @author yingdazhu@icloud.com
  * @git github.com/zhuyingda/zippo-ui
