@@ -1,4 +1,4 @@
-require('./module1.less');
+require('./testModule.less');
 
 var mask = require('../../../../../index').mask;
 //var mask = require('zippo-ui').mask;
@@ -23,5 +23,5 @@ function index(){
 }
 
 module.exports = {
-  md1: index
+  test: index
 }

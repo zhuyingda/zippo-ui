@@ -13,12 +13,9 @@ webpackJsonp([0,1],[
 	
 	var
 	  
-	  md1 = __webpack_require__(2),
+	  testModule = __webpack_require__(2);
 	
-	  
-	  md2 = __webpack_require__(18);
-	
-	md1.md1();
+	testModule.test();
 
 
 /***/ },
@@ -50,7 +47,7 @@ webpackJsonp([0,1],[
 	}
 	
 	module.exports = {
-	  md1: index
+	  test: index
 	}
 
 /***/ },
@@ -95,9 +92,11 @@ webpackJsonp([0,1],[
 	  /**
 	   * @desc 初始化容器dom元素
 	   */
-	  //base = require('./pager_container.handlebars'),
-	  base = '<div class="page-box clearfix"><div class="page-btn btn-style prev" style="float: left;">上一页</div><div class="page-wrap" style="float: left;"></div><div class="page-btn btn-style next" style="float: left;">下一页</div></div>',
-	
+	  //base = require('./pager_container.hbs'),
+	  base = function(){
+	    var str = '<div class="page-box clearfix"><div class="page-btn btn-style prev" style="float: left;">上一页</div><div class="page-wrap" style="float: left;"></div><div class="page-btn btn-style next" style="float: left;">下一页</div></div>';
+	    return str;
+	  },
 	  /**
 	   * @desc 当前所在页（从1开始）
 	   */
@@ -130,28 +129,28 @@ webpackJsonp([0,1],[
 	 */
 	function setTotal(n) {
 	  total = n;
-	  renderPager(curPage);
+	  core(curPage);
 	}
 	
 	/**
 	 * @desc 排列第pageNum页的按钮列表
 	 * @var begin 当前页从第begin页开始
 	 * @var end 当前页的最后一个按钮的页数
-	 * @var pageLen 总页数
+	 * @var endPageNum 总页数
 	 * @var pagerContainer 组件容器
 	 */
-	function renderPager(pageNum) {
+	function core(pageNum) {
 	  var
 	    begin,
 	    end,
-	    pageLen = Math.ceil(total / itemInPage) + 1,
+	    endPageNum = Math.ceil(total / itemInPage),
 	    pagerContainer = $('.page-wrap');
 	
-	  begin = beginCal(pageNum, btnInPage, pageLen);
-	  end = endCal(begin, btnInPage, pageLen);
+	  begin = beginCal(pageNum, btnInPage, endPageNum);
+	  end = endCal(begin, btnInPage, endPageNum);
 	
 	  pagerContainer.empty();
-	  for (var i = begin; i < end; i++) {
+	  for (var i = begin; i <= end; i++) {
 	    pagerContainer.append('<div class="page-item" style="float: left;cursor: pointer;">' + i + '</div>');
 	  }
 	  for (i = 0; i < $('.page-item').length; i++) {
@@ -160,42 +159,47 @@ webpackJsonp([0,1],[
 	    }
 	  }
 	
-	  edgeCheck(pageNum, pageLen);
+	  edgeCheck(pageNum, endPageNum);
 	  curPage = pageNum;
 	}
 	
 	/**
-	 * @desc 计算当前页翻页按钮列表的起始位和末位
+	 * @desc 计算当前页翻页按钮列表的起始位
 	 */
-	function beginCal(pageNum, btns, pageLen) {
-	  if (pageNum <= Math.round(btns / 2)) {
+	function beginCal(pageNum, btns, endPageNum) {
+	  var mid = Math.round(btns / 2),
+	    rest = Math.abs(endPageNum - pageNum);
+	  if (pageNum <= mid) {
 	    return 1;
-	  } else if (pageNum > Math.round(btns / 2) && Math.abs((pageLen - 1) - pageNum) >= Math.round(btns / 2)) {
-	    return pageNum - Math.round(btns / 2) + 1;
-	  } else if (Math.abs((pageLen - 1) - pageNum) < Math.round(btns / 2)) {
-	    if (pageLen > btns) {
-	      return pageLen - btns;
+	  } else if (pageNum > mid && rest >= mid) {
+	    return pageNum - mid + 1;
+	  } else if (rest < mid) {
+	    if (endPageNum > btns) {
+	      return endPageNum - (btns-1);
 	    } else {
 	      return 1;
 	    }
 	  }
 	}
 	
-	function endCal(begin, btns, pageLen) {
-	  if (btns <= pageLen) {
-	    return btns + begin;
+	/**
+	 * @desc 计算当前页翻页按钮列表的起末位
+	 */
+	function endCal(begin, btns, endPageNum) {
+	  if (btns <= endPageNum) {
+	    return btns + begin - 1;
 	  } else {
-	    return pageLen + begin - 1;
+	    return endPageNum;
 	  }
 	}
 	
 	/**
 	 * @desc 按钮样式边界处理
 	 */
-	function edgeCheck(pageNum, pageLen) {
+	function edgeCheck(pageNum, endPageNum) {
 	  if (pageNum == 1) {
 	    $('.page-box').addClass('in-first-page').removeClass('in-last-page');
-	  } else if (pageNum == pageLen - 1) {
+	  } else if (pageNum == endPageNum) {
 	    $('.page-box').addClass('in-last-page').removeClass('in-first-page');
 	  } else {
 	    $('.page-box').removeClass('in-first-page in-last-page');
@@ -205,22 +209,22 @@ webpackJsonp([0,1],[
 	/**
 	 * @desc 翻页回调
 	 */
-	function onTurn(func) {
+	function onTurn(cb) {
 	  $('.next').click(function () {
 	    if (!$('.page-box').hasClass('in-last-page')) {
-	      renderPager(++curPage);
-	      func(curPage);
+	      core(++curPage);
+	      cb(curPage);
 	    }
 	  });
 	  $('.prev').click(function () {
 	    if (!$('.page-box').hasClass('in-first-page')) {
-	      renderPager(--curPage);
-	      func(curPage);
+	      core(--curPage);
+	      cb(curPage);
 	    }
 	  });
 	  $('.page-wrap').on('click', '.page-item', function () {
-	    renderPager($(this).html());
-	    func($(this).html());
+	    core($(this).html());
+	    cb($(this).html());
 	  });
 	}
 	
@@ -345,9 +349,12 @@ webpackJsonp([0,1],[
 	  if (options.animation == 'fade') {
 	    layerWrap.fadeOut(400, function () {
 	      layerWrap.remove();
+	      baseLevel--;
+	      if(baseLevel == 10000){
+	        $('body').css({overflow:'auto'}).removeAttr('style');
+	      }
 	    });
 	  }
-	  baseLevel--;
 	  manager[id] = null;
 	  manager[id] = undefined;
 	}
@@ -360,7 +367,7 @@ webpackJsonp([0,1],[
 	  var id = 'mask_' + maskId;
 	  var opt = optionFilter(options);
 	  init(tpl, opt, id);
-	  fixPosition(opt, id);
+	  prefix(opt, id);
 	  var layerWrap = $('#' + id);
 	  manager[id] = {
 	    $dom: layerWrap,
@@ -382,7 +389,7 @@ webpackJsonp([0,1],[
 	  }
 	}
 	
-	function fixPosition(options, id){
+	function prefix(options, id){
 	  if (!options.top) {
 	    $('#' + id + ' .tpl_wrapper').css({
 	      'margin-top': '-' + $('.tpl_wrapper').height() / 2 + 'px'
@@ -393,7 +400,8 @@ webpackJsonp([0,1],[
 	      'margin-left': '-' + $('.tpl_wrapper').width() / 2 + 'px'
 	    });
 	  }
-	  $('#' + id).css({display:'none',visibility:'inherit'})
+	  $('#' + id).css({display:'none',visibility:'inherit'});
+	  $('body').css({overflow:'hidden'});
 	}
 	
 	/**
@@ -1358,20 +1366,6 @@ webpackJsonp([0,1],[
 	
 	module.exports = exports['default'];
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	
-	
-	function index(){
-	  console.log('this is module2');
-	}
-	
-	module.exports = {
-	  md2: index
-	}
 
 /***/ }
 ]);

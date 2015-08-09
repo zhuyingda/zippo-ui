@@ -93,9 +93,12 @@ function close(id, options) {
   if (options.animation == 'fade') {
     layerWrap.fadeOut(400, function () {
       layerWrap.remove();
+      baseLevel--;
+      if(baseLevel == 10000){
+        $('body').css({overflow:'auto'}).removeAttr('style');
+      }
     });
   }
-  baseLevel--;
   manager[id] = null;
   manager[id] = undefined;
 }
@@ -108,7 +111,7 @@ function showMask(tpl, options) {
   var id = 'mask_' + maskId;
   var opt = optionFilter(options);
   init(tpl, opt, id);
-  fixPosition(opt, id);
+  prefix(opt, id);
   var layerWrap = $('#' + id);
   manager[id] = {
     $dom: layerWrap,
@@ -130,7 +133,7 @@ function showMask(tpl, options) {
   }
 }
 
-function fixPosition(options, id){
+function prefix(options, id){
   if (!options.top) {
     $('#' + id + ' .tpl_wrapper').css({
       'margin-top': '-' + $('.tpl_wrapper').height() / 2 + 'px'
@@ -141,7 +144,8 @@ function fixPosition(options, id){
       'margin-left': '-' + $('.tpl_wrapper').width() / 2 + 'px'
     });
   }
-  $('#' + id).css({display:'none',visibility:'inherit'})
+  $('#' + id).css({display:'none',visibility:'inherit'});
+  $('body').css({overflow:'hidden'});
 }
 
 /**

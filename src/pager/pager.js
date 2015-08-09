@@ -17,7 +17,7 @@ var
   /**
    * @desc 初始化容器dom元素
    */
-  //base = require('./pager_container.handlebars'),
+  //base = require('./pager_container.hbs'),
   base = function(){
     var str = '<div class="page-box clearfix"><div class="page-btn btn-style prev" style="float: left;">上一页</div><div class="page-wrap" style="float: left;"></div><div class="page-btn btn-style next" style="float: left;">下一页</div></div>';
     return str;

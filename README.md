@@ -21,6 +21,7 @@ npm install zippo-ui
 
 Component-Mask Usage
 --------------------------------------
+This component just like the [modal](http://getbootstrap.com/javascript/#modals) in bootstrap, but you can shake it.
 ```bash
 var zippo = require('zippo-ui');
 ```
