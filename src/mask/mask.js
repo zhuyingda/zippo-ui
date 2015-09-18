@@ -153,6 +153,9 @@ function prefix(options, id){
  */
 function optionFilter(o) {
   var opt = {};
+  if(o == undefined){
+    return opt;
+  }
   opt.hasAnimation = o.animation ? true : false;
   return $.extend(o, opt);
 }

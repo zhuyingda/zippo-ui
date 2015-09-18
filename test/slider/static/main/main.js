@@ -5,6 +5,6 @@ var
    * @desc testModule
    * @type {exports}
    */
-  testModule = require('../../modules/testMask/test');
+  testModule = require('../../modules/testSlider/test');
 
-testModule.test();
+testModule.unitTest();
