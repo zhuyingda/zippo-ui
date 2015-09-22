@@ -10,25 +10,30 @@
  */
 
 var
-  /**
-   * @desc 弹层遮罩
-   */
-  maskLayer = '<div style="width:100%;height:100%;position:absolute;left:0;top:0;background:#000;opacity:0.4;filter:alpha(opacity=40);z-index:100;"><iframe src="about:blank" style="z-index:-1;width:100%;height:100%" allowtransparency="true" frameborder=0></iframe></div>',
+    /**
+     * @desc 弹层遮罩
+     */
+    maskLayer = '<div style="width:100%;height:100%;position:absolute;left:0;top:0;background:#000;opacity:0.4;filter:alpha(opacity=40);z-index:100;"><iframe src="about:blank" style="z-index:-1;width:100%;height:100%" allowtransparency="true" frameborder=0></iframe></div>',
 
-  /**
-   * @desc 当前弹层层级
-   */
-  baseLevel = 10000,
+    /**
+     * @desc 当前弹层层级
+     */
+    baseLevel = 10000,
 
-  /**
-   * @desc 当前弹层层级
-   */
-  maskId = 0,
+    /**
+     * @desc 当前弹层层级
+     */
+    maskId = 0,
 
-  /**
-   * @desc 弹层管理器
-   */
-  manager = {};
+    /**
+     * @desc 在修改html和body样式前备份其原有样式
+     */
+    styleBackup = {},
+
+    /**
+     * @desc 弹层管理器
+     */
+    manager = {};
 
 /**
  * @desc 初始化
@@ -36,19 +41,19 @@ var
 function init(tpl, options, id) {
   baseLevel++;
   var html =
-    '<div id="mask_' + maskId + '" ' +
-    'style="visibility: hidden;' +
-    'position: absolute; ' +
-    'top: 0px;' +
-    'left: 0px; ' +
-    'z-index: ' + baseLevel + ';' +
-    'width: 100%;' +
-    'height: 100%;">' + maskLayer +
-    '<div class="tpl_wrapper" style="position: absolute;' +
-    'z-index: 200;' +
-    'left: 50%;' +
-    'top: 50%;">' + tpl.trim() +
-    '</div></div>';
+      '<div id="mask_' + maskId + '" ' +
+      'style="visibility: hidden;' +
+      'position: absolute; ' +
+      'top: 0px;' +
+      'left: 0px; ' +
+      'z-index: ' + baseLevel + ';' +
+      'width: 100%;' +
+      'height: '+ $(document.body).height() +'px;">' + maskLayer +
+      '<div class="tpl_wrapper" style="position: fixed;' +
+      'z-index: 200;' +
+      'left: 50%;' +
+      'top: 50%;">' + tpl.trim() +
+      '</div></div>';
   $('body').append(html);
 }
 
@@ -94,8 +99,9 @@ function close(id, options) {
     layerWrap.fadeOut(400, function () {
       layerWrap.remove();
       baseLevel--;
-      if(baseLevel == 10000){
-        $('body').css({overflow:'auto'}).removeAttr('style');
+      if (baseLevel == 10000) {
+        styleBackup.body!=''? $('body').attr({'style': styleBackup.body}): $('body').removeAttr('style');
+        styleBackup.html!=''? $('html').attr({'style': styleBackup.html}): $('html').removeAttr('style');
       }
     });
   }
@@ -133,7 +139,7 @@ function showMask(tpl, options) {
   }
 }
 
-function prefix(options, id){
+function prefix(options, id) {
   if (!options.top) {
     $('#' + id + ' .tpl_wrapper').css({
       'margin-top': '-' + $('.tpl_wrapper').height() / 2 + 'px'
@@ -144,8 +150,14 @@ function prefix(options, id){
       'margin-left': '-' + $('.tpl_wrapper').width() / 2 + 'px'
     });
   }
-  $('#' + id).css({display:'none',visibility:'inherit'});
-  $('body').css({overflow:'hidden'});
+  $('#' + id).css({display: 'none', visibility: 'inherit'});
+  if(styleBackup.body == undefined){
+    styleBackup.body = $('body').attr('style')==undefined? '': $('body').attr('style');
+    styleBackup.html = $('html').attr('style')==undefined? '': $('html').attr('style');
+    styleBackup.width = $('body').width();
+  }
+  $('body').css({overflow: 'hidden'}).width(styleBackup.width);
+  $('html').css({overflow: 'hidden'});
 }
 
 /**
@@ -153,7 +165,7 @@ function prefix(options, id){
  */
 function optionFilter(o) {
   var opt = {};
-  if(o == undefined){
+  if (o == undefined) {
     return opt;
   }
   opt.hasAnimation = o.animation ? true : false;

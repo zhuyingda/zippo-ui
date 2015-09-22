@@ -28,6 +28,11 @@
         maskId = 0,
 
         /**
+         * @desc 在修改html和body样式前备份其原有样式
+         */
+        styleBackup = {},
+
+        /**
          * @desc 弹层管理器
          */
         manager = {};
@@ -45,8 +50,8 @@
             'left: 0px; ' +
             'z-index: ' + baseLevel + ';' +
             'width: 100%;' +
-            'height: 100%;">' + maskLayer +
-            '<div class="tpl_wrapper" style="position: absolute;' +
+            'height: '+ $(document.body).height() +'px;">' + maskLayer +
+            '<div class="tpl_wrapper" style="position: fixed;' +
             'z-index: 200;' +
             'left: 50%;' +
             'top: 50%;">' + tpl.trim() +
@@ -97,7 +102,8 @@
                 layerWrap.remove();
                 baseLevel--;
                 if (baseLevel == 10000) {
-                    $('body').css({overflow: 'auto'}).removeAttr('style');
+                    styleBackup.body!=''? $('body').attr({'style': styleBackup.body}): $('body').removeAttr('style');
+                    styleBackup.html!=''? $('html').attr({'style': styleBackup.html}): $('html').removeAttr('style');
                 }
             });
         }
@@ -147,7 +153,13 @@
             });
         }
         $('#' + id).css({display: 'none', visibility: 'inherit'});
-        $('body').css({overflow: 'hidden'});
+        if(styleBackup.body == undefined){
+            styleBackup.body = $('body').attr('style')==undefined? '': $('body').attr('style');
+            styleBackup.html = $('html').attr('style')==undefined? '': $('html').attr('style');
+            styleBackup.width = $('body').width();
+        }
+        $('body').css({overflow: 'hidden'}).width(styleBackup.width);
+        $('html').css({overflow: 'hidden'});
     }
 
     /**
