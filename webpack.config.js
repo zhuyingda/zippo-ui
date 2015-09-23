@@ -1,26 +1,26 @@
 var webpack = require('webpack');
 var path = require('path');
 
-module.exports = function () {
+module.exports = function (page) {
     var webpackConfig = {
         entry: {
-            main: [jsDest + '/.tmp/static/main/main.js']
+            main: ['./src/'+ process.env.PAGE + '/' + process.env.PAGE +'.js']
         },
         output: {
-            path: jsDest,
-            filename: env === 'production' ? 'js/[name]_' + configEnv + '_[hash].js' : 'js/[name]_' + configEnv + '.js',
-            publicPath: publicPath
+            path: './release/' + process.env.PAGE + '/',
+            filename: 'js/[name]_' + process.env.PAGE + '_[hash].js',
+            publicPath: 'public'
         },
 
         plugins: [
         ],
         module: {
             loaders: [{
-                test: /\.handlebars$/,
+                test: /\.hbs$/,
                 loader: "handlebars-loader",
                 query: {
                     helperDirs: [
-                        path.resolve(__dirname, '../../' + configEnv + '/helpers/')
+                        path.resolve('./src/helpers/')
                     ]
                 }
             }]
