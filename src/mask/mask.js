@@ -13,8 +13,7 @@ var
     /**
      * @desc 弹层遮罩
      */
-    maskLayer = '<div style="width:100%;height:100%;position:absolute;left:0;top:0;background:#000;opacity:0.4;filter:alpha(opacity=40);z-index:100;"><iframe src="about:blank" style="z-index:-1;width:100%;height:100%" allowtransparency="true" frameborder=0></iframe></div>',
-
+    maskLayer = require('./mask_layer.hbs'),
     /**
      * @desc 当前弹层层级
      */
@@ -40,20 +39,13 @@ var
  */
 function init(tpl, options, id) {
   baseLevel++;
-  var html =
-      '<div id="mask_' + maskId + '" ' +
-      'style="visibility: hidden;' +
-      'position: absolute; ' +
-      'top: 0px;' +
-      'left: 0px; ' +
-      'z-index: ' + baseLevel + ';' +
-      'width: 100%;' +
-      'height: '+ $(document.body).height() +'px;">' + maskLayer +
-      '<div class="tpl_wrapper" style="position: fixed;' +
-      'z-index: 200;' +
-      'left: 50%;' +
-      'top: 50%;">' + tpl.trim() +
-      '</div></div>';
+  var param = {
+    maskId: maskId,
+    baseLevel: baseLevel,
+    height: Math.max($(document.body).height(), $(document).height(), $(window).height())+30,//30像素是因为可能存在的滚动条
+    content: tpl.trim()
+  };
+  var html = maskLayer(param);
   $('body').append(html);
 }
 
@@ -100,6 +92,7 @@ function close(id, options) {
       layerWrap.remove();
       baseLevel--;
       if (baseLevel == 10000) {
+        console.log(styleBackup.body);
         styleBackup.body!=''? $('body').attr({'style': styleBackup.body}): $('body').removeAttr('style');
         styleBackup.html!=''? $('html').attr({'style': styleBackup.html}): $('html').removeAttr('style');
       }

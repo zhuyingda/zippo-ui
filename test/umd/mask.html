@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="http://s1.qhimg.com/!d383ee34/reset.css">
-    <link rel="stylesheet" href="css/main_mask.css">
+    <link rel="stylesheet" href="../../lib/reset.css">
     <style>
         body {
             background: #eeeeee;
@@ -66,8 +65,27 @@
 <button id="btn_show">展示弹层</button>
 <button id="btn_shake">抖个骚</button>
 <button id="btn_close">关闭弹层</button>
-<script src="http://s0.qhimg.com/!68df3f33/jquery.js"></script>
-<script src="js/shared_mask.js"></script>
-<script src="js/main_mask.js"></script>
+<script src="../../lib/jquery.min.js"></script>
+<script src="../../release/mask/mask.release.js"></script>
+<script>
+    (function () {
+        var tpl = '<div class="dialog"><h1>这是一个测试的弹层，请叫我标题</h1><p>这是测试弹层的内容</p><p>想看点好玩的特效吗，点抖个骚试试？</p></div>';
+        var maskStack = [];
+        $('#btn_show').click(function () {
+            var m = mask.showMask(tpl,{animation:'fade'});
+            maskStack.push(m);
+            console.log(mask.maskList());
+        });
+        $('#btn_shake').click(function () {
+            var m = maskStack.pop();
+            m.shake();
+            maskStack.push(m);
+        });
+        $('#btn_close').click(function () {
+            var m = maskStack.pop();
+            m.close();
+        });
+    })();
+</script>
 </body>
 </html>

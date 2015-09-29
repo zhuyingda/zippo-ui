@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../lib/reset.css">
+    <link rel="stylesheet" href="../../release/pager/pager.css">
+    <style>
+        #pager {
+            float: left;
+            margin-top: 200px;
+            margin-left: 100px;
+        }
+        button {
+            padding: 3px;
+            position: absolute;
+            left: 200px;
+            top: 400px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="pager"></div>
+<button>改变items数量</button>
+<script src="../../lib/jquery.min.js"></script>
+<script src="../../release/pager/pager.release.js"></script>
+<script>
+    ;(function () {
+        pager.init({
+            $el: $('#pager'),
+            btnInPage: 10,
+            itemInPage: 14,
+            onTurn: function (curPage) {
+                console.log(curPage);
+            }
+        });
+        pager.setTotal(70);
+        $('button').click(function () {
+            var num = 50 + Math.floor(Math.random() * 100);
+            pager.setTotal(num);
+            console.log('当前item个数：', num);
+        });
+    })();
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "name": "zippo-ui",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "a javascript ui library",
   "main": "index.js",
   "directories": {
@@ -13,6 +13,10 @@
     "gulp": "^3.9.0"
   },
   "devDependencies": {
+    "expose-loader": "^0.7.0",
+    "gulp-util": "^3.0.6",
+    "handlebars": "^4.0.2",
+    "handlebars-loader": "^1.1.4",
     "minimist": "^1.2.0"
   },
   "scripts": {

@@ -1,29 +1,31 @@
 var webpack = require('webpack');
 var path = require('path');
 
-module.exports = function (page) {
+module.exports = function (name) {
     var webpackConfig = {
         entry: {
-            main: ['./src/'+ process.env.PAGE + '/' + process.env.PAGE +'.js']
+            main: ['./src/' + name + '/' + name + '.js']
         },
         output: {
-            path: './release/' + process.env.PAGE + '/',
-            filename: 'js/[name]_' + process.env.PAGE + '_[hash].js',
+            path: './release/' + name + '/',
+            filename: name + '.release.js',
             publicPath: 'public'
         },
 
-        plugins: [
-        ],
+        plugins: [],
         module: {
             loaders: [{
-                test: /\.hbs$/,
-                loader: "handlebars-loader",
+                test: /\.hbs$/, loader: "handlebars-loader",
                 query: {
                     helperDirs: [
                         path.resolve('./src/helpers/')
                     ]
+                    }
+                },
+                {
+                    test: require.resolve('./src/'+name+'/'+name), loader: "expose?"+name
                 }
-            }]
+            ]
         }
     };
     return webpackConfig;
