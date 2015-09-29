@@ -5,29 +5,35 @@ var webpackConfig = require('./webpack.config');
 var gutil = require('gulp-util');
 var path = require('path');
 var minimist = require('minimist');
+var watch = require('gulp-watch');
 
 gulp.task('initEnv', function () {
     var options = minimist(process.argv.slice(2), {
-        string: ['wgt'],
+        string: ['module'],
         default: {
-            wgt: "pager"
+            module: "pager"
         }
     });
-    process.env.WGT = options.wgt;
+    process.env.MODULE = options.module;
 });
 
 gulp.task('less', function () {
-    return gulp.src('./src/' + process.env.WGT + '/*.less')
+    return gulp.src('./src/' + process.env.MODULE + '/*.less')
         .pipe(less())
-        .pipe(gulp.dest('./release/' + process.env.WGT + '/'));
+        .pipe(gulp.dest('./release/' + process.env.MODULE + '/'));
 });
 
-//gulp.task('watch', function () {
-//  gulp.watch('./src/**/*.less', ['less']);
-//});
+gulp.task('watch', function () {
+    watch('./src/' + process.env.MODULE + '/' + process.env.MODULE + '.less', function () {
+        gulp.start('less');
+    });
+    watch('./src/' + process.env.MODULE + '/' + process.env.MODULE + '.js', function () {
+        gulp.start('webpack');
+    })
+});
 
 gulp.task('webpack', function (callback) {
-    webpack(webpackConfig(process.env.WGT), function (err, stats) {
+    webpack(webpackConfig(process.env.MODULE), function (err, stats) {
         if (err) throw new gutil.PluginError("webpack", err);
         gutil.log("[webpack]", stats.toString({
             // output options
@@ -36,6 +42,10 @@ gulp.task('webpack', function (callback) {
     })
 });
 
+gulp.task('build', ['less', 'webpack'], function () {
+    gulp.start('watch');
+});
+
 gulp.task('default', ['initEnv'], function () {
-    gulp.start('webpack');
+    gulp.start('build');
 });
