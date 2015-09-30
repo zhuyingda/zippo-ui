@@ -1,3 +1,11 @@
-<div class="zp_focus">
-    <div class="zp_list"></div>
+<div class="zp_focus" style="overflow: hidden;width: {{width}}px;height: {{height}}px;">
+    <div class="zp_slider" style="position: relative;">
+        {{#each list}}
+            <div class="zp_slider_item" style="display: none;position: absolute;width: {{width}}px;height: {{height}}px;">
+                <a href="{{href}}" style="display: block;width: {{width}}px;height: {{height}}px;">
+                    <img src="{{img}}" alt="">
+                </a>
+            </div>
+        {{/each}}
+    </div>
 </div>

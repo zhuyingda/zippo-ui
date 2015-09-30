@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../lib/reset.css">
+    <style>
+        #slider {
+            float: left;
+            margin-top: 200px;
+            margin-left: 100px;
+        }
+        button {
+            padding: 3px;
+            position: absolute;
+            left: 200px;
+            top: 400px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>分页组件单元测试</title>
+</head>
+<body>
+<div id="slider"></div>
+<script src="../../lib/jquery.min.js"></script>
+<script src="../../release/slider/slider.release.js"></script>
+<script>
+    ;(function () {
+        slider.init({
+            height: 280,
+            width: 520,
+            $el: $('#slider'),
+            res: [
+                {
+                    img: 'http://img.alicdn.com/tps/i2/TB1loLAJFXXXXXDXVXXvKyzTVXX-520-280.jpg',
+                    href: '#'
+                },
+                {
+                    img: 'http://aecpm.alicdn.com/simba/img/TB1R_sfJFXXXXb_XFXXSutbFXXX.jpg',
+                    href: '#'
+                },
+                {
+                    img: 'http://aecpm.alicdn.com/simba/img/TB1M1QbJFXXXXaSXFXXSutbFXXX.jpg',
+                    href: '#'
+                }
+            ]
+        })
+    })();
+</script>
+</body>
+</html>

@@ -20,10 +20,10 @@ module.exports = function (name) {
                     helperDirs: [
                         path.resolve('./src/helpers/')
                     ]
-                    }
-                },
+                }
+            },
                 {
-                    test: require.resolve('./src/'+name+'/'+name), loader: "expose?"+name
+                    test: require.resolve('./src/' + name + '/' + name), loader: "expose?" + name
                 }
             ]
         }

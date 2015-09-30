@@ -29,7 +29,10 @@ gulp.task('watch', function () {
     });
     watch('./src/' + process.env.MODULE + '/' + process.env.MODULE + '.js', function () {
         gulp.start('webpack');
-    })
+    });
+    watch('./src/' + process.env.MODULE + '/*.hbs', function () {
+        gulp.start('webpack');
+    });
 });
 
 gulp.task('webpack', function (callback) {
