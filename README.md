@@ -2,8 +2,12 @@ zippo-ui — a developing JavaScript ui library
 ==================================================
 
 
-What is zippo-ui?
---------------------------------------
+简单介绍 What is zippo-ui?
+----------------------------------------------
+主要对目前各大主流网站页面中常用的一些UI组件、场景进行了抽象和封装，组成了一个工具集，服务于日常的开发工作。
+我对这个工具集的初衷是，在简单易用的前提下提高前端开发效率。
+组件库强依赖于jQuery，主要应用场景是PC端web页面。
+
 It is a web UI library of Javascript which provides a lot of individual components you may need in your daily web developing.
 There is although a few problem in this function lib, but what I can promise is :
 
@@ -13,14 +17,14 @@ There is although a few problem in this function lib, but what I can promise is 
 - most importantly, you can always contact me from e-mail or github issues for any problems you meet.
 
 
-Install
---------------------------------------
+引入方式 Install
+----------------------------------------------
 ```bash
 npm install zippo-ui
 ```
 
-Component-Mask Usage
---------------------------------------
+弹层组件用法 Component-Mask Usage
+----------------------------------------------
 This component just like the [modal](http://getbootstrap.com/javascript/#modals) in bootstrap, but you can shake it.
 ```bash
 var zippo = require('zippo-ui');
@@ -46,8 +50,8 @@ var masks = zippo.mask.maskList();
 console.log(masks);
 ```
 
-Component-Pager Usage
---------------------------------------
+分页组件用法 Component-Pager Usage
+----------------------------------------------
 ```bash
 var zippo = require('zippo-ui');
 ```
