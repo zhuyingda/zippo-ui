@@ -15,7 +15,7 @@ var
   /**
    * @desc 初始化容器dom元素
    */
-  base = require('./pager_container.hbs'),
+  base = require('./container.hbs'),
   /**
    * @desc 当前所在页（从1开始）
    */

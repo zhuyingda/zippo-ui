@@ -85,6 +85,9 @@ function init(options){
 }
 
 function transform(i){
+  if(lock){
+    return;
+  }
   if(config.type == 'slide'){
     _slide(i);
   }
@@ -95,6 +98,7 @@ function _slide(i){
   $('.zp_slider_item').eq(i).animate({left:'-'+config.width+'px'},config.transformTime);
   $('.zp_slider_item').eq(iNext).css({left:config.width+'px',display:'block'}).animate({left:'0px'},config.transformTime,'swing', function () {
     $('.zp_slider_item').eq(i).css({display:'none',left:'0px'});
+    lock = true;
   });
 }
 
