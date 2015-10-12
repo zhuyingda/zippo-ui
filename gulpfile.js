@@ -9,12 +9,12 @@ var watch = require('gulp-watch');
 
 gulp.task('initEnv', function () {
     var options = minimist(process.argv.slice(2), {
-        string: ['module'],
+        string: ['m'],
         default: {
-            module: "pager"
+            m: "pager"
         }
     });
-    process.env.MODULE = options.module;
+    process.env.MODULE = options.m;
 });
 
 gulp.task('less', function () {
@@ -31,6 +31,9 @@ gulp.task('watch', function () {
         gulp.start('webpack');
     });
     watch('./src/' + process.env.MODULE + '/*.hbs', function () {
+        gulp.start('webpack');
+    });
+    watch('./src/helpers/*.js', function () {
         gulp.start('webpack');
     });
 });

@@ -11,17 +11,18 @@ module.exports = function (name) {
             filename: name + '.release.js',
             publicPath: 'public'
         },
-
+        devtool: 'source-map',
         plugins: [],
         module: {
-            loaders: [{
-                test: /\.hbs$/, loader: "handlebars-loader",
-                query: {
-                    helperDirs: [
-                        path.resolve('./src/helpers/')
-                    ]
-                }
-            },
+            loaders: [
+                {
+                    test: /\.hbs$/, loader: "handlebars-loader",
+                    query: {
+                        helperDirs: [
+                            path.resolve('./src/helpers/')
+                        ]
+                    }
+                },
                 {
                     test: require.resolve('./src/' + name + '/' + name), loader: "expose?" + name
                 }
