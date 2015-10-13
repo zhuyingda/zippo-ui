@@ -7,6 +7,7 @@ module.exports = {
   pager: require('./src/pager/pager'),
   mask: require('./src/mask/mask'),
   slider: require('./src/slider/slider'),
+  matrix: require('./src/matrix/matrix'),
   util: {
     truncate: require('./src/utils/truncate/truncate'),
     insert: require('./src/utils/insert/insert2cursor'),

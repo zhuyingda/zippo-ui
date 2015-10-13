@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../lib/reset.css">
+    <style>
+        #list {
+            float: left;
+            margin-top: 200px;
+            margin-left: 100px;
+            background: #cccc99;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>阵列组件单元测试</title>
+</head>
+<body>
+<div id="list"></div>
+<script src="../../lib/jquery.min.js"></script>
+<script src="../../release/matrix/matrix.release.js"></script>
+<script>
+    ;(function () {
+        matrix.init({
+            containerHeight: 208,
+            containerWidth: 450,
+            itemWidth: 72,
+            itemHeight: 97,
+            marginVertical: 8,
+            marginHorizontal: 8,
+            $el: $('#list'),
+            res: [
+                "<div>123</div>",
+                "<div>123</div>",
+                "<div>123</div>",
+                "<div>123</div>",
+                "<div>123</div>",
+                "<div>123</div>",
+                "<div>123</div>",
+                "<div>123</div>"
+            ]
+        })
+    })();
+</script>
+</body>
+</html>
