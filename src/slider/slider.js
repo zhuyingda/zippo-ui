@@ -39,7 +39,10 @@ config = {
     api: 'event',
     width: 0,
     height: 0,
-    transformTime: 500
+    transformTime: 500,
+    cb: function(i) {
+        console.log(i);
+    }
 },
 
 res = [],
@@ -74,6 +77,9 @@ Loop = function (cb) {
         },
         setCurItem: function (i) {
             curItem = i;
+        },
+        getCurItem: function () {
+            return curItem;
         }
     }
 };
@@ -85,6 +91,8 @@ var loop = new Loop(function (i) {
 function init(options) {
     var o = prefix(options);
     config = $.extend(config, o);
+
+    fixConsole();
 
     res = o.res;
     $.map(res, function (i) {
@@ -154,6 +162,8 @@ function _slide(i) {
             if (!loop.isPlay()) {
                 loop.play();
             }
+            var curItem = loop.getCurItem() == res.length - 1 ? 0 : loop.getCurItem() + 1;
+            config.cb(curItem);
         })
     } else {
         $('.zp_slider').animate({left: '-' + config.width * iNext + 'px'}, config.transformTime, '_default', function () {
@@ -164,6 +174,8 @@ function _slide(i) {
             if (!loop.isPlay()) {
                 loop.play();
             }
+            var curItem = loop.getCurItem() == res.length - 1 ? 0 : loop.getCurItem() + 1;
+            config.cb(curItem);
         });
     }
 }
@@ -178,5 +190,7 @@ function prefix(options) {
 
 module.exports = {
     init: init,
-    turn: turn
+    turn: turn,
+    stop: loop.stop,
+    play: loop.play
 }

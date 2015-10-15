@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var less = require('gulp-less');
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config');
+var umdConfig = require('./umd.config');
 var gutil = require('gulp-util');
 var path = require('path');
 var minimist = require('minimist');
@@ -11,13 +12,18 @@ gulp.task('initEnv', function () {
     var options = minimist(process.argv.slice(2), {
         string: ['m'],
         default: {
-            m: "pager"
+            m: "global"
         }
     });
     process.env.MODULE = options.m;
 });
 
 gulp.task('less', function () {
+    if(process.env.MODULE == 'global'){
+        return gulp.src('./src/**/*.less')
+            .pipe(less())
+            .pipe(gulp.dest('./release/'));
+    }
     return gulp.src('./src/' + process.env.MODULE + '/*.less')
         .pipe(less())
         .pipe(gulp.dest('./release/' + process.env.MODULE + '/'));
@@ -39,7 +45,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('webpack', function (callback) {
-    webpack(webpackConfig(process.env.MODULE), function (err, stats) {
+    webpack(umdConfig(process.env.MODULE), function (err, stats) {
         if (err) throw new gutil.PluginError("webpack", err);
         gutil.log("[webpack]", stats.toString({
             // output options

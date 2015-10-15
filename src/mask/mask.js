@@ -57,7 +57,7 @@ function shake(id) {
         return;
     }
     manager[id].lock = true;
-    var layer = $('#' + id + ' .tpl_wrapper');
+    var layer = $('#' + id + ' .zp_wrapper');
     var curPos = parseInt(layer.css('left'));
     var freq = 50;
     var swing = 5;
@@ -100,6 +100,7 @@ function close(id, options) {
     }
     manager[id] = null;
     manager[id] = undefined;
+    delete manager[id];
 }
 
 /**
@@ -134,13 +135,13 @@ function showMask(tpl, options) {
 
 function prefix(options, id) {
     if (!options.top) {
-        $('#' + id + ' .tpl_wrapper').css({
-            'margin-top': '-' + $('.tpl_wrapper').height() / 2 + 'px'
+        $('#' + id + ' .zp_wrapper').css({
+            'margin-top': '-' + $('.zp_wrapper').height() / 2 + 'px'
         });
     }
     if (!options.left) {
-        $('#' + id + ' .tpl_wrapper').css({
-            'margin-left': '-' + $('.tpl_wrapper').width() / 2 + 'px'
+        $('#' + id + ' .zp_wrapper').css({
+            'margin-left': '-' + $('.zp_wrapper').width() / 2 + 'px'
         });
     }
     $('#' + id).css({display: 'none', visibility: 'inherit'});
