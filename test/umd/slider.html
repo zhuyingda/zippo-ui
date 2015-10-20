@@ -8,11 +8,24 @@
             margin-top: 200px;
             margin-left: 100px;
         }
+        #slider2 {
+            float: left;
+            margin-top: 100px;
+            margin-left: 100px;
+        }
         button {
-            padding: 3px;
+            padding: 20px;
+            float: left;
+        }
+        .btns {
             position: absolute;
+            top: 543px;
             left: 200px;
-            top: 400px;
+        }
+        .btns2 {
+            position: absolute;
+            top: 1000px;
+            left: 200px;
         }
     </style>
     <meta charset="UTF-8">
@@ -20,33 +33,104 @@
 </head>
 <body>
 <div id="slider"></div>
+<div class="btns clearfix">
+    <button>item</button>
+    <button>item</button>
+    <button>item</button>
+    <button>item</button>
+</div>
+<div id="slider2"></div>
+<div class="btns2 clearfix">
+    <button>item</button>
+    <button>item</button>
+    <button>item</button>
+    <button>item</button>
+</div>
 <script src="../../lib/jquery.min.js"></script>
 <script src="../../release/slider/slider.release.js"></script>
 <script>
-    ;(function () {
-        slider.init({
-            height: 280,
-            width: 520,
+    (function () {
+        var s = slider.init({
+            height: 334,
+            width: 524,
             $el: $('#slider'),
             res: [
                 {
-                    img: 'http://img.alicdn.com/tps/i2/TB1loLAJFXXXXXDXVXXvKyzTVXX-520-280.jpg',
+                    img: 'http://p0.qhimg.com/d/inn/a09c2c29/s/p1.png',
                     href: '#'
                 },
                 {
-                    img: 'http://aecpm.alicdn.com/simba/img/TB1R_sfJFXXXXb_XFXXSutbFXXX.jpg',
+                    img: 'http://p6.qhimg.com/d/inn/a09c2c29/s/p2.png',
                     href: '#'
                 },
                 {
-                    img: 'http://aecpm.alicdn.com/simba/img/TB1M1QbJFXXXXaSXFXXSutbFXXX.jpg',
+                    img: 'http://p6.qhimg.com/d/inn/a09c2c29/s/p3.png',
                     href: '#'
                 },
                 {
-                    img: 'http://aecpm.alicdn.com/simba/img/TB19z2iJpXXXXbzXXXXSutbFXXX.jpg',
+                    img: 'http://p6.qhimg.com/d/inn/a09c2c29/s/p4.png',
                     href: '#'
                 }
-            ]
-        })
+            ],
+            cb: function (i) {
+                if(cursor != null){
+                    if(cursor != i){
+                        s.turn(cursor);
+                    }
+                }
+            }
+        });
+        var cursor = null;
+        $('.btns button')
+                .mouseenter(function () {
+                    var i = $(this).index();
+                    cursor = i;
+                    s.turn(i);
+                })
+                .mouseleave(function () {
+                    cursor = null;
+                });
+
+        var s2 = slider.init({
+            height: 334,
+            width: 524,
+            $el: $('#slider2'),
+            res: [
+                {
+                    img: 'http://p0.qhimg.com/d/inn/a09c2c29/s/p1.png',
+                    href: '#'
+                },
+                {
+                    img: 'http://p6.qhimg.com/d/inn/a09c2c29/s/p2.png',
+                    href: '#'
+                },
+                {
+                    img: 'http://p6.qhimg.com/d/inn/a09c2c29/s/p3.png',
+                    href: '#'
+                },
+                {
+                    img: 'http://p6.qhimg.com/d/inn/a09c2c29/s/p4.png',
+                    href: '#'
+                }
+            ],
+            cb: function (i) {
+                if(cursor != null){
+                    if(cursor != i){
+                        s2.turn(cursor);
+                    }
+                }
+            }
+        });
+        var cursor2 = null;
+        $('.btns2 button')
+                .mouseenter(function () {
+                    var i = $(this).index();
+                    cursor2 = i;
+                    s2.turn(i);
+                })
+                .mouseleave(function () {
+                    cursor2 = null;
+                });
     })();
 </script>
 </body>
