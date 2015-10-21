@@ -8,7 +8,12 @@
         .btns {
             position: absolute;
             left: 200px;
-            top: 300px;
+            top: 400px;
+        }
+        .btns2 {
+            position: absolute;
+            left: 200px;
+            top: 800px;
         }
         button {
             padding: 30px;
@@ -19,11 +24,24 @@
             margin-left: 100px;
             margin-top: 100px;
         }
+        #carousel2 {
+            float: left;
+            margin-left: 100px;
+            margin-top: 250px;
+        }
+        img {
+            width: 181px;
+        }
     </style>
 </head>
 <body>
 <div id="carousel"></div>
 <div class="btns">
+    <button class="l">L</button>
+    <button class="r">R</button>
+</div>
+<div id="carousel2"></div>
+<div class="btns2">
     <button class="l">L</button>
     <button class="r">R</button>
 </div>
@@ -33,21 +51,49 @@
     (function () {
         var c = carousel.init({
             $el: $('#carousel'),
-            width: 500,
-            itemWidth: 100,
-            height: 100,
+            width: 905,
+            itemWidth: 181,
+            height: 181,
             res: [
-                '<div style=\"height: inherit;background: #ff0000\">123123123</div>',
-                '<div style=\"height: inherit;background: #ffff00\">123123123</div>',
-                '<div style=\"height: inherit;background: #00ffff\">123123123</div>',
-                '<div style=\"height: inherit;background: #0000ff\">123123123</div>',
-                '<div style=\"height: inherit;background: #00ff00\">123123123</div>',
-                '<div style=\"height: inherit;background: #ff00ff\">123123123</div>',
-                '<div>123123123</div>'
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c1.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c2.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c3.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c4.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c5.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c6.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c7.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c8.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c9.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c10.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c11.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c12.png"></div>'
             ]
         });
-        $('.r').click(c.turnRight);
-        $('.l').click(c.turnLeft);
+        $('.btns .r').click(c.turnRight);
+        $('.btns .l').click(c.turnLeft);
+
+        var c2 = carousel.init({
+            $el: $('#carousel2'),
+            width: 905,
+            itemWidth: 181,
+            height: 181,
+            res: [
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c1.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c2.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c3.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c4.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c5.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c6.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c7.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c8.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c9.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c10.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c11.png"></div>',
+                '<div style=\"height: inherit;\"><img src="http://p8.qhimg.com/d/inn/f3dc9573/car/c12.png"></div>'
+            ]
+        });
+        $('.btns2 .r').click(c2.turnRight);
+        $('.btns2 .l').click(c2.turnLeft);
     })()
 </script>
 </body>

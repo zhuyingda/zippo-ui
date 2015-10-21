@@ -4,18 +4,16 @@ zippo-ui — a developing JavaScript ui library
 
 简单介绍 What is zippo-ui?
 ----------------------------------------------
-主要对目前各大主流网站页面中常用的一些UI组件、场景进行了抽象和封装，组成了一个工具集，服务于日常的开发工作。
-我对这个工具集的初衷是，在简单易用的前提下提高前端开发效率。
-组件库强依赖于jQuery，主要应用场景是PC端web页面。
+这是一个基于javascript语言commonJs模块规范的函数库，其中集成了一些前端开发工作中常见的UI组件并对其进行抽象和封装。开发这个组件库的初衷主要是：
+- 小而美的一个轻量级UI组件库
+- 以commonJs为模块规范进行开发和使用
+- 将UI组件中可复用的内部逻辑抽象出来，不掺杂过多的样式
 
-It is a web UI library of Javascript which provides a lot of individual components you may need in your daily web developing.
-There is although a few problem in this function lib, but what I can promise is :
-
-- this library will never ignore the ie6 problems in PC web components;
-- as far as I can do for upward-compatible with future nx release versions;
-- every component has a unit test if you wanna see it;
-- most importantly, you can always contact me from e-mail or github issues for any problems you meet.
-
+同时，它具有以下特点：
+- 简单易用
+- 提供umd打包后的cdn版，支持传统的js函数库引用方式
+- 基于jquery
+- 支持在commonJs的前端代码预编译环境，如webpack
 
 函数库状态
 ----------------------------------------------

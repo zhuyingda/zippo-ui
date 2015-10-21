@@ -51,9 +51,15 @@ function Carousel(options) {
     var
 
     /**
-     * @desc 配置
+     * @desc 组件实例的标识
      */
     cid = ++flag,
+
+    /**
+     * 动画锁
+     * @type {boolean}
+     */
+    lock = false,
 
     /**
      * @desc 配置
@@ -87,7 +93,7 @@ function Carousel(options) {
     });
     config.$el.html(tpl({
         list: r,
-        listW: config.itemWidth*r.length,
+        listW: config.itemWidth * r.length,
         width: config.width,
         height: config.height,
         flag: cid
@@ -98,23 +104,43 @@ function Carousel(options) {
     }.bind(this), config.period);
     loop.play();
 
+    $('.zp_c' + cid).mouseenter(function () {
+        loop.stop();
+    }).mouseleave(function () {
+        if(!loop.isPlay()){
+            loop.play();
+        }
+    });
+
     function curLeft() {
-        return $('.zp_c'+cid+' .zp_carousel').css('left');
+        return $('.zp_c' + cid + ' .zp_carousel').css('left');
     }
 
     this.turnRight = function () {
+        if (lock) {
+            return;
+        }
+        lock = true;
         loop.stop();
-        $('.zp_c'+cid+' .zp_carousel').animate({'left': '-' + config.itemWidth + 'px'}, config.transformTime, 'swing', function () {
-            $('.zp_c'+cid+' .zp_carousel').append($('.zp_c'+cid+' .zp_c_item').first()).css({'left': '0px'});
+        $('.zp_c' + cid + ' .zp_carousel').animate({'left': '-' + config.itemWidth + 'px'}, config.transformTime, 'swing', function () {
+            $('.zp_c' + cid + ' .zp_carousel').append($('.zp_c' + cid + ' .zp_c_item').first()).css({'left': '0px'});
             loop.play();
+            lock = false;
         });
     };
 
     this.turnLeft = function () {
+        if (lock) {
+            return;
+        }
+        lock = true;
         loop.stop();
-        $('.zp_c'+cid+' .zp_carousel').prepend($('.zp_c'+cid+' .zp_c_item').last())
+        $('.zp_c' + cid + ' .zp_carousel').prepend($('.zp_c' + cid + ' .zp_c_item').last())
             .css({'left': '-' + config.itemWidth + 'px'})
-            .animate({'left': parseInt(curLeft()) + config.itemWidth + 'px'}, config.transformTime, 'swing', loop.play);
+            .animate({'left': parseInt(curLeft()) + config.itemWidth + 'px'}, config.transformTime, 'swing', function () {
+                loop.play();
+                lock = false;
+            });
     };
 }
 
