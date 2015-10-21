@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../lib/reset.css">
+    <title>轮播列表单元测试</title>
+    <style>
+        .btns {
+            position: absolute;
+            left: 200px;
+            top: 300px;
+        }
+        button {
+            padding: 30px;
+            margin: 30px;
+        }
+        #carousel {
+            float: left;
+            margin-left: 100px;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+<div id="carousel"></div>
+<div class="btns">
+    <button class="l">L</button>
+    <button class="r">R</button>
+</div>
+<script src="../../lib/jquery.min.js"></script>
+<script src="../../release/carousel/carousel.release.js"></script>
+<script>
+    (function () {
+        var c = carousel.init({
+            $el: $('#carousel'),
+            width: 500,
+            itemWidth: 100,
+            height: 100,
+            res: [
+                '<div style=\"height: inherit;background: #ff0000\">123123123</div>',
+                '<div style=\"height: inherit;background: #ffff00\">123123123</div>',
+                '<div style=\"height: inherit;background: #00ffff\">123123123</div>',
+                '<div style=\"height: inherit;background: #0000ff\">123123123</div>',
+                '<div style=\"height: inherit;background: #00ff00\">123123123</div>',
+                '<div style=\"height: inherit;background: #ff00ff\">123123123</div>',
+                '<div>123123123</div>'
+            ]
+        });
+        $('.r').click(c.turnRight);
+        $('.l').click(c.turnLeft);
+    })()
+</script>
+</body>
+</html>

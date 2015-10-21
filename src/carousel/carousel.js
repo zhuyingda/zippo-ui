@@ -1,85 +1,127 @@
-//require('./like.less');
-
 var
-  /**
-   * @desc 定时器
-   */
-  interval = null,
 
-  /**
-   * @desc 延迟器
-   */
-  timeout = null,
+/**
+ * @desc 渲染dom
+ */
+tpl = require('./tpl.hbs'),
 
-  /**
-   * @desc 轮播每个元素的宽度
-   */
-  itemWidth = 0,
+/**
+ * @desc 每个轮播图实例的标识
+ */
+flag = 0,
 
-  /**
-   * @desc 配置
-   */
-  opt = {
-    $item: null,
-    $list: null,
-    $btnL: null,
-    $btnR: null,
-    period: 4000,
-    velocity: 300
-  };
+/**
+ * @desc 资源
+ */
+fixConsole = require('../utils/console'),
 
-function stop() {
-  clearInterval(interval);
-  interval = null;
-  timeout = null;
+/**
+ * @desc 轮播定时器
+ */
+Loop = function (cb, time) {
+    var inter = null;
+    return {
+        play: function () {
+            if (inter !== null) {
+                return;
+            }
+            inter = setInterval(function () {
+                cb();
+            }, time);
+        },
+        stop: function () {
+            clearInterval(inter);
+            inter = null;
+        },
+        isPlay: function () {
+            return inter != null;
+        }
+    }
+};
+
+function prefix(options) {
+    var o = options;
+    if (!o.$el) {
+        console.warn('you should choose a $dom for building your carousel.')
+    }
+    return o;
 }
 
-function play() {
-  if (interval === null) {
-    timeout = setTimeout(function () {
-      if (interval === null) {
-        interval = setInterval(function () {
-          opt.$list.animate({'left': '-' + itemWidth + 'px'}, opt.velocity, 'swing', function () {
-            opt.$list.append(opt.$item.first()).css({'left': '0px'});
-          });
-        }, opt.period);
-      }
-    }, 1000);
-  }
+function Carousel(options) {
+    var
+
+    /**
+     * @desc 配置
+     */
+    cid = ++flag,
+
+    /**
+     * @desc 配置
+     */
+    config = {
+        $el: {},
+        autoPlay: true,
+        period: 5000,
+        transformTime: 500,
+        width: 0,
+        itemWidth: 0,
+        height: 0,
+        res: [],
+        cb: function (orientation) {
+            console.log('turning animate was:', orientation);
+        }
+    };
+
+    var o = prefix(options);
+    config = $.extend(config, o);
+
+    fixConsole();
+
+    var r = [];
+    $.map(config.res, function (i) {
+        r.push({
+            content: i,
+            width: config.itemWidth,
+            height: config.height
+        });
+    });
+    config.$el.html(tpl({
+        list: r,
+        listW: config.itemWidth*r.length,
+        width: config.width,
+        height: config.height,
+        flag: cid
+    }));
+
+    var loop = new Loop(function () {
+        this.turnRight();
+    }.bind(this), config.period);
+    loop.play();
+
+    function curLeft() {
+        return $('.zp_c'+cid+' .zp_carousel').css('left');
+    }
+
+    this.turnRight = function () {
+        loop.stop();
+        $('.zp_c'+cid+' .zp_carousel').animate({'left': '-' + config.itemWidth + 'px'}, config.transformTime, 'swing', function () {
+            $('.zp_c'+cid+' .zp_carousel').append($('.zp_c'+cid+' .zp_c_item').first()).css({'left': '0px'});
+            loop.play();
+        });
+    };
+
+    this.turnLeft = function () {
+        loop.stop();
+        $('.zp_c'+cid+' .zp_carousel').prepend($('.zp_c'+cid+' .zp_c_item').last())
+            .css({'left': '-' + config.itemWidth + 'px'})
+            .animate({'left': parseInt(curLeft()) + config.itemWidth + 'px'}, config.transformTime, 'swing', loop.play);
+    };
 }
 
-function turnLeft() {
-  stop();
-  opt.$list.prepend(opt.$item.last())
-    .css({'left': '-' + itemWidth + 'px'})
-    .animate({'left': parseInt(curLeft()) + itemWidth + 'px'}, opt.velocity, 'swing', play);
-}
-
-function turnRight() {
-  stop();
-  opt.$list.animate({'left': '-' + itemWidth + 'px'}, opt.velocity, 'swing', function () {
-    opt.$list.append(opt.$item.first()).css({'left': '0px'});
-    play();
-  });
-}
-
-function curLeft() {
-  return opt.$list.css('left');
-}
-
-function init(option) {
-  opt = option;
-  itemWidth = parseInt(opt.$item.css('width')) + parseInt(opt.$item.css('margin-right'));
-  interval = null;
-  timeout = null;
-  opt.$list.css({width: opt.$item.length * itemWidth});
-  opt.$btnL.click(turnLeft);
-  opt.$btnR.click(turnRight);
-  opt.$list.mouseenter(stop).mouseleave(play);
-
-  play();
+function init(options) {
+    return new Carousel(options);
 }
 
 module.exports = {
-  init: init
+    init: init
 }
