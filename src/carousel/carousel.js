@@ -1,5 +1,15 @@
+/**
+ * @widget
+ * @author zyd
+ * @version 1.3.2
+ * pager   -   轮播列表
+ * @author yingdazhu@icloud.com
+ * @git github.com/zhuyingda/zippo-ui
+ * @module commonJS
+ * @require carousel.hbs
+ * @require jquery
+ */
 var
-
 /**
  * @desc 渲染dom
  */

@@ -1,5 +1,15 @@
+/**
+ * @widget
+ * @author zyd
+ * @version 1.3.2
+ * slider   -   轮播图
+ * @author yingdazhu@icloud.com
+ * @git github.com/zhuyingda/zippo-ui
+ * @module commonJS
+ * @require slider.hbs
+ * @require jquery
+ */
 var
-
 /**
  * @desc 针对c3的jQuery插件
  */
@@ -12,7 +22,6 @@ container = require('./container-slide.hbs'),
 
 /**
  * @desc css检测器
- * @type {*|exports|module.exports}
  */
 canUse = require('../utils/css-detector'),
 
