@@ -11,7 +11,7 @@
  * @param {number} len 长度限制，以英文或半角符号为1个单位长度，中文占2个
  */
 
-function index(str, len) {
+function index(str, len, ellipsis) {
   str = isStr(str);
   var weight = 0,
     tmp = '',
@@ -25,7 +25,7 @@ function index(str, len) {
     }
     i++;
   }
-  if(tmp.length < str.length){
+  if(ellipsis == true && tmp.length < str.length){
     tmp += '…';
   }
   return tmp;

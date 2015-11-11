@@ -1,0 +1,8 @@
+.angle {
+    width: 0px;
+    height: 0px;
+    border-top: 50px solid #F00;
+    border-right: 50px solid #03F;
+    border-bottom: 50px solid #F90;
+    border-left: 50px solid #6C0;
+}
