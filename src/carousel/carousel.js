@@ -26,6 +26,11 @@ flag = 0,
 fixConsole = require('../utils/console'),
 
 /**
+ * @desc 资源
+ */
+fixBind = require('../utils/bind'),
+
+/**
  * @desc 轮播定时器
  */
 Loop = function (cb, time) {
@@ -80,6 +85,7 @@ function Carousel(options) {
         period: 5000,
         transformTime: 500,
         width: 0,
+        step: 1,
         itemWidth: 0,
         height: 0,
         res: [],
@@ -109,6 +115,7 @@ function Carousel(options) {
         flag: cid
     }));
 
+    fixBind();
     var loop = new Loop(function () {
         this.turnRight();
     }.bind(this), config.period);
@@ -117,7 +124,7 @@ function Carousel(options) {
     $('.zp_c' + cid).mouseenter(function () {
         loop.stop();
     }).mouseleave(function () {
-        if(!loop.isPlay()){
+        if (!loop.isPlay()) {
             loop.play();
         }
     });
@@ -132,8 +139,8 @@ function Carousel(options) {
         }
         lock = true;
         loop.stop();
-        $('.zp_c' + cid + ' .zp_carousel').animate({'left': '-' + config.itemWidth + 'px'}, config.transformTime, 'swing', function () {
-            $('.zp_c' + cid + ' .zp_carousel').append($('.zp_c' + cid + ' .zp_c_item').first()).css({'left': '0px'});
+        $('.zp_c' + cid + ' .zp_carousel').animate({'left': '-' + config.itemWidth * config.step + 'px'}, config.transformTime, 'swing', function () {
+            $('.zp_c' + cid + ' .zp_carousel').append($('.zp_c' + cid + ' .zp_c_item').slice(0, config.step)).css({'left': '0px'});
             loop.play();
             lock = false;
         });
@@ -145,13 +152,14 @@ function Carousel(options) {
         }
         lock = true;
         loop.stop();
-        $('.zp_c' + cid + ' .zp_carousel').prepend($('.zp_c' + cid + ' .zp_c_item').last())
-            .css({'left': '-' + config.itemWidth + 'px'})
-            .animate({'left': parseInt(curLeft()) + config.itemWidth + 'px'}, config.transformTime, 'swing', function () {
+        $('.zp_c' + cid + ' .zp_carousel').prepend($('.zp_c' + cid + ' .zp_c_item').slice($('.zp_c' + cid + ' .zp_c_item').length-config.step,$('.zp_c' + cid + ' .zp_c_item').length))
+            .css({'left': '-' + config.itemWidth * config.step + 'px'})
+            .animate({'left': parseInt(curLeft()) + config.itemWidth * config.step + 'px'}, config.transformTime, 'swing', function () {
                 loop.play();
                 lock = false;
             });
     };
+
 }
 
 function init(options) {

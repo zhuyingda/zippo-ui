@@ -61,8 +61,18 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * @widget
+	 * @author zyd
+	 * @version 1.3.2
+	 * pager   -   轮播列表
+	 * @author yingdazhu@icloud.com
+	 * @git github.com/zhuyingda/zippo-ui
+	 * @module commonJS
+	 * @require carousel.hbs
+	 * @require jquery
+	 */
 	var
-	
 	/**
 	 * @desc 渲染dom
 	 */
@@ -77,6 +87,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @desc 资源
 	 */
 	fixConsole = __webpack_require__(22),
+	
+	/**
+	 * @desc 资源
+	 */
+	fixBind = __webpack_require__(23),
 	
 	/**
 	 * @desc 轮播定时器
@@ -133,6 +148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        period: 5000,
 	        transformTime: 500,
 	        width: 0,
+	        step: 1,
 	        itemWidth: 0,
 	        height: 0,
 	        res: [],
@@ -162,6 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        flag: cid
 	    }));
 	
+	    fixBind();
 	    var loop = new Loop(function () {
 	        this.turnRight();
 	    }.bind(this), config.period);
@@ -170,7 +187,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $('.zp_c' + cid).mouseenter(function () {
 	        loop.stop();
 	    }).mouseleave(function () {
-	        if(!loop.isPlay()){
+	        if (!loop.isPlay()) {
 	            loop.play();
 	        }
 	    });
@@ -185,8 +202,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        lock = true;
 	        loop.stop();
-	        $('.zp_c' + cid + ' .zp_carousel').animate({'left': '-' + config.itemWidth + 'px'}, config.transformTime, 'swing', function () {
-	            $('.zp_c' + cid + ' .zp_carousel').append($('.zp_c' + cid + ' .zp_c_item').first()).css({'left': '0px'});
+	        $('.zp_c' + cid + ' .zp_carousel').animate({'left': '-' + config.itemWidth * config.step + 'px'}, config.transformTime, 'swing', function () {
+	            $('.zp_c' + cid + ' .zp_carousel').append($('.zp_c' + cid + ' .zp_c_item').slice(0, config.step)).css({'left': '0px'});
 	            loop.play();
 	            lock = false;
 	        });
@@ -198,13 +215,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        lock = true;
 	        loop.stop();
-	        $('.zp_c' + cid + ' .zp_carousel').prepend($('.zp_c' + cid + ' .zp_c_item').last())
-	            .css({'left': '-' + config.itemWidth + 'px'})
-	            .animate({'left': parseInt(curLeft()) + config.itemWidth + 'px'}, config.transformTime, 'swing', function () {
+	        $('.zp_c' + cid + ' .zp_carousel').prepend($('.zp_c' + cid + ' .zp_c_item').slice($('.zp_c' + cid + ' .zp_c_item').length-config.step,$('.zp_c' + cid + ' .zp_c_item').length))
+	            .css({'left': '-' + config.itemWidth * config.step + 'px'})
+	            .animate({'left': parseInt(curLeft()) + config.itemWidth * config.step + 'px'}, config.transformTime, 'swing', function () {
 	                loop.play();
 	                lock = false;
 	            });
 	    };
+	
 	}
 	
 	function init(options) {
@@ -1435,6 +1453,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = ieConsole;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	module.exports = function () {
+	    if (!Function.prototype.bind) {
+	        Function.prototype.bind = function(oThis) {
+	            if (typeof this !== 'function') {
+	                // closest thing possible to the ECMAScript 5
+	                // internal IsCallable function
+	                throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+	            }
+	
+	            var aArgs   = Array.prototype.slice.call(arguments, 1),
+	            fToBind = this,
+	            fNOP    = function() {},
+	            fBound  = function() {
+	                return fToBind.apply(this instanceof fNOP && oThis
+	                        ? this
+	                        : oThis,
+	                    aArgs.concat(Array.prototype.slice.call(arguments)));
+	            };
+	
+	            fNOP.prototype = this.prototype;
+	            fBound.prototype = new fNOP();
+	
+	            return fBound;
+	        };
+	    }
+	}
+
 
 /***/ }
 /******/ ])

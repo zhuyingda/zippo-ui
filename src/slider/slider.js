@@ -13,7 +13,7 @@ var
 /**
  * @desc 针对c3的jQuery插件
  */
-$t = require('jquery.transit'),
+//$t = require('jquery.transit'),
 
 /**
  * @desc 渲染dom
@@ -148,8 +148,9 @@ function Slider(options){
             width: config.width,
             height: config.height
         }));
-        if (canUse('transform')) {
-            $t('.zp_s'+sid+' .zp_slider').css({x: '-' + config.width + 'px'});
+        //todo: jquery.transition所依赖的jquery版本过新
+        if (canUse('transformssssssss')) {
+            //$t('.zp_s'+sid+' .zp_slider').css({x: '-' + config.width + 'px'});
         } else {
             $('.zp_s'+sid+' .zp_slider').css({left: '-' + config.width + 'px'});
         }
@@ -188,21 +189,22 @@ function Slider(options){
 
     function _slide(i) {
         var iNext = i + 2;
-        if (canUse('transform')) {
-            $t('.zp_s'+sid+' .zp_slider').transition({x: '-' + config.width * iNext + 'px'}, config.transformTime, '_default', function () {
-                if (iNext == res.length + 1) {
-                    $t('.zp_s'+sid+' .zp_slider').css({x: '-' + config.width + 'px'});
-                }
-                lock = false;
-                if (!loop.isPlay()) {
-                    loop.play();
-                }
-                var curItem = loop.getCurItem() == res.length - 1 ? 0 : loop.getCurItem() + 1;
-                config.cb(curItem);
-            })
+        //todo: jquery.transition所依赖的jquery版本过新
+        if (canUse('transformsssssssss')) {
+            //$t('.zp_s'+sid+' .zp_slider').transition({x: '-' + config.width * iNext + 'px'}, config.transformTime, '_default', function () {
+            //    if (iNext == res.length + 1) {
+            //        $t('.zp_s'+sid+' .zp_slider').css({x: '-' + config.width + 'px'});
+            //    }
+            //    lock = false;
+            //    if (!loop.isPlay()) {
+            //        loop.play();
+            //    }
+            //    var curItem = loop.getCurItem() == res.length - 1 ? 0 : loop.getCurItem() + 1;
+            //    config.cb(curItem);
+            //})
         } else {
-            $('.zp_s'+sid+' .zp_slider').animate({left: '-' + config.width * iNext + 'px'}, config.transformTime, '_default', function () {
-                if (iNext == res.length - 1) {
+            $('.zp_s'+sid+' .zp_slider').animate({left: '-' + config.width * iNext + 'px'}, config.transformTime, 'swing', function () {
+                if (iNext == res.length + 1) {
                     $('.zp_s'+sid+' .zp_slider').css({left: '-' + config.width + 'px'});
                 }
                 lock = false;

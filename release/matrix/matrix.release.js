@@ -100,10 +100,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var param = {res: []};
 	
-	    config.res.map(function () {
+	    $.map(config.res, function () {
 	        param.res.push({});
 	    });
-	    param.res.map(function (i, key) {
+	    $.map(param.res, function (i, key) {
 	        i.width = config.itemWidth;
 	        i.height = config.itemHeight;
 	        i.marginVertical = config.marginVertical;
