@@ -12,6 +12,9 @@ module.exports = {
   util: {
     truncate: require('./src/utils/truncate/truncate'),
     insert: require('./src/utils/insert/insert2cursor'),
-    clip: require('./src/utils/clipboard/copy2clipboard')
+    clip: require('./src/utils/clipboard/copy2clipboard'),
+    console: require('./src/utils/console'),
+    bind: require('./src/utils/bind'),
+    cssDetector: require('./src/utils/css-detector')
   }
 }

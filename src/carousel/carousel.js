@@ -54,6 +54,9 @@ Loop = function (cb, time) {
     }
 };
 
+
+fixConsole();
+
 function prefix(options) {
     var o = options;
     if (!o.$el) {
@@ -96,8 +99,6 @@ function Carousel(options) {
 
     var o = prefix(options);
     config = $.extend(config, o);
-
-    fixConsole();
 
     var r = [];
     $.map(config.res, function (i) {

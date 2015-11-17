@@ -1,8 +1,10 @@
 function ieConsole(){
-    if(!console){
-        console.log = function(){};
-        console.warn= function(){};
-        console.error=function(){};
+    if(window.console == undefined){
+        window.console= {
+            log: function(){},
+            warn: function () {},
+            error: function(){}
+        }
     }
 }
 

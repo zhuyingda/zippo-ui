@@ -10,10 +10,6 @@
  * @require jquery
  */
 var
-/**
- * @desc 针对c3的jQuery插件
- */
-//$t = require('jquery.transit'),
 
 /**
  * @desc 渲染dom
@@ -70,6 +66,8 @@ Loop = function (cb, time, resLen) {
     }
 };
 
+fixConsole();
+
 function prefix(options) {
     var o = options;
     if (!o.$el) {
@@ -116,8 +114,6 @@ function Slider(options){
     var o = prefix(options);
     config = $.extend(config, o);
 
-    fixConsole();
-
     res = o.res;
 
     var loop = new Loop(function (i) {
@@ -150,7 +146,7 @@ function Slider(options){
         }));
         //todo: jquery.transition所依赖的jquery版本过新
         if (canUse('transformssssssss')) {
-            //$t('.zp_s'+sid+' .zp_slider').css({x: '-' + config.width + 'px'});
+
         } else {
             $('.zp_s'+sid+' .zp_slider').css({left: '-' + config.width + 'px'});
         }
@@ -191,17 +187,7 @@ function Slider(options){
         var iNext = i + 2;
         //todo: jquery.transition所依赖的jquery版本过新
         if (canUse('transformsssssssss')) {
-            //$t('.zp_s'+sid+' .zp_slider').transition({x: '-' + config.width * iNext + 'px'}, config.transformTime, '_default', function () {
-            //    if (iNext == res.length + 1) {
-            //        $t('.zp_s'+sid+' .zp_slider').css({x: '-' + config.width + 'px'});
-            //    }
-            //    lock = false;
-            //    if (!loop.isPlay()) {
-            //        loop.play();
-            //    }
-            //    var curItem = loop.getCurItem() == res.length - 1 ? 0 : loop.getCurItem() + 1;
-            //    config.cb(curItem);
-            //})
+
         } else {
             $('.zp_s'+sid+' .zp_slider').animate({left: '-' + config.width * iNext + 'px'}, config.transformTime, 'swing', function () {
                 if (iNext == res.length + 1) {
