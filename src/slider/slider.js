@@ -100,6 +100,7 @@ function Slider(options){
         api: 'event',
         width: 0,
         height: 0,
+        openInNewTab: false,
         transformTime: 500,
         cb: function (i) {
             console.log(i);
@@ -120,29 +121,22 @@ function Slider(options){
         transform(i);
     }, config.period, res.length);
 
-    $.map(res, function (i) {
-        i.width = config.width;
-        i.height = config.height;
-    });
     if (config.type == 'slide') {
         config.$el.html(container({
             flag: sid,
             list: res,
             listHead: {
-                width: config.width,
-                height: config.height,
                 href: res[res.length - 1].href,
                 img: res[res.length - 1].img
             },
             listEnd: {
-                width: config.width,
-                height: config.height,
                 href: res[0].href,
                 img: res[0].img,
                 lastIndex: res.length
             },
             width: config.width,
-            height: config.height
+            height: config.height,
+            openType: config.openInNewTab? '_blank': '_self'
         }));
         //todo: jquery.transition所依赖的jquery版本过新
         if (canUse('transformssssssss')) {

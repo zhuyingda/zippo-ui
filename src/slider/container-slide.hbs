@@ -2,24 +2,24 @@
     <div class="zp_slider" style="position: relative;">
         {{#listHead}}
             <div class="zp_slider_item_backup"
-                 style="position: absolute;width: {{width}}px;height: {{height}}px;left: 0;">
-                <a href="{{href}}" style="display: block;width: {{width}}px;height: {{height}}px;">
+                 style="position: absolute;width: {{../width}}px;height: {{../height}}px;left: 0;">
+                <a href="{{href}}" style="display: block;width: {{../width}}px;height: {{../height}}px;">
                     <img src="{{img}}" alt="">
                 </a>
             </div>
         {{/listHead}}
         {{#each list}}
             <div class="zp_slider_item"
-                 style="position: absolute;width: {{width}}px;height: {{height}}px;left: {{calcLeft @index width}}px;">
-                <a href="{{href}}" style="display: block;width: {{width}}px;height: {{height}}px;">
+                 style="position: absolute;width: {{../width}}px;height: {{../height}}px;left: {{calcLeft @index ../width}}px;">
+                <a href="{{href}}" target="{{../openType}}" style="display: block;width: {{../width}}px;height: {{../height}}px;">
                     <img src="{{img}}" alt="">
                 </a>
             </div>
         {{/each}}
         {{#listEnd}}
             <div class="zp_slider_item_backup"
-                 style="position: absolute;width: {{width}}px;height: {{height}}px;left: {{calcLeft lastIndex width}}px;">
-                <a href="{{href}}" style="display: block;width: {{width}}px;height: {{height}}px;">
+                 style="position: absolute;width: {{../width}}px;height: {{../height}}px;left: {{calcLeft lastIndex ../width}}px;">
+                <a href="{{href}}" style="display: block;width: {{../width}}px;height: {{../height}}px;">
                     <img src="{{img}}" alt="">
                 </a>
             </div>

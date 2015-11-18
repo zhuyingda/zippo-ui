@@ -17,7 +17,7 @@
     "expose-loader": "^0.7.0",
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.3.5",
-    "handlebars": "^4.0.2",
+    "handlebars": "^4.0.4",
     "handlebars-loader": "^1.1.4",
     "jquery.transit": "^0.9.12",
     "minimist": "^1.2.0"
