@@ -1,10 +1,10 @@
 var path = require('path');
 
 module.exports = function (name) {
-    var index = name=='global'? './index.js': './src/' + name + '/' + name + '.js',
+    var index = name=='global'? './src/index.js': './src/' + name + '/' + name + '.js',
         pathDir = name=='global'? './release/': './release/' + name + '/',
         fileName = name=='global'? 'zippo.release.js': name+".release.js",
-        libName = name=='global'? 'zp': name;
+        libName = name=='global'? 'zippo': name;
 
     var config = {
         entry: {
