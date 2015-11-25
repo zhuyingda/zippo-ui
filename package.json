@@ -1,19 +1,19 @@
 {
   "name": "zippo-ui",
-  "version": "1.4.8",
+  "version": "1.4.10",
   "description": "a javascript ui library",
   "main": "release/zippo.release.js",
   "directories": {
     "example": "example"
   },
   "dependencies": {
-    "gulp-less": "^3.0.3",
-    "webpack": "^1.10.5",
-    "jquery": "^2.1.4",
-    "jquery.transit": "^0.9.12",
-    "gulp": "^3.9.0"
+
   },
   "devDependencies": {
+    "gulp-less": "^3.0.3",
+    "webpack": "^1.10.5",
+    "jquery": "1.11.1",
+    "gulp": "^3.9.0",
     "expose-loader": "^0.7.0",
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.3.5",

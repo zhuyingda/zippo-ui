@@ -1,8 +1,7 @@
 /**
  * @widget
  * @author zyd
- * @version 1.3.2
- * pager   -   弹层
+ * mask   -   弹层
  * @author yingdazhu@icloud.com
  * @git github.com/zhuyingda/zippo-ui
  * @module commonJS
@@ -37,7 +36,7 @@ manager = {};
 /**
  * @desc 初始化
  */
-function init(tpl, options, id) {
+function init(tpl) {
     baseLevel++;
     var param = {
         maskId: maskId,
@@ -108,11 +107,13 @@ function close(id, options) {
  */
 function showMask(tpl, options) {
     maskId++;
-    var id = 'mask_' + maskId;
-    var opt = optionFilter(options);
-    init(tpl, opt, id);
+    styleBackup.width = $('body').width();
+    init(tpl);
+    var
+    id = 'mask_' + maskId,
+    opt = optionFilter(options),
+    layerWrap = $('#' + id);
     prefix(opt, id);
-    var layerWrap = $('#' + id);
     manager[id] = {
         $dom: layerWrap,
         lock: false
@@ -122,6 +123,12 @@ function showMask(tpl, options) {
     }
     if (opt.animation == 'fade') {
         layerWrap.fadeIn();
+    }
+    if (!XMLHttpRequest) {
+        ie6Fix(id);
+        $(window).resize(function () {
+            ie6Fix(id);
+        });
     }
     return {
         'shake': function () {
@@ -134,6 +141,7 @@ function showMask(tpl, options) {
 }
 
 function prefix(options, id) {
+    var $body = $('body'), $html = $('html');
     if (!options.top) {
         $('#' + id + ' .zp_wrapper').css({
             'margin-top': '-' + $('.zp_wrapper').height() / 2 + 'px'
@@ -146,12 +154,25 @@ function prefix(options, id) {
     }
     $('#' + id).css({display: 'none', visibility: 'inherit'});
     if (styleBackup.body == undefined) {
-        styleBackup.body = $('body').attr('style') == undefined ? '' : $('body').attr('style');
-        styleBackup.html = $('html').attr('style') == undefined ? '' : $('html').attr('style');
-        styleBackup.width = $('body').width();
+        styleBackup.body = $body.attr('style') == undefined ? '' : $body.attr('style');
+        styleBackup.html = $html.attr('style') == undefined ? '' : $html.attr('style');
     }
-    $('body').css({overflow: 'hidden'}).width(styleBackup.width);
-    $('html').css({overflow: 'hidden'});
+    $body.css({overflow: 'hidden'});
+    $html.css({overflow: 'hidden'});
+
+    $body.width(styleBackup.width);
+}
+
+function ie6Fix(id) {
+    var tplW = $(id + ' .zp_wrapper').width(),
+    tplH = $(id + ' .zp_wrapper').height(),
+    bodyW = $('body').width(),
+    bodyH = $('body').height();
+    $(id + ' .zp_wrapper').css({
+        position: 'absolute',
+        left: bodyW / 2 - tplW / 2 + 'px',
+        top: bodyH / 2 - tplH / 2 + 'px'
+    });
 }
 
 /**
