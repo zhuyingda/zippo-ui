@@ -1,7 +1,5 @@
 /**
  * @widget
- * @author zyd
- * @version 1.3.2
  * slider   -   轮播图
  * @author yingdazhu@icloud.com
  * @git github.com/zhuyingda/zippo-ui
@@ -24,7 +22,12 @@ canUse = require('../utils/css-detector'),
 /**
  * @desc 资源
  */
-fixConsole = require('../utils/console'),
+fixConsole = require('../utils/console')(),
+
+/**
+ * @desc 动画库
+ */
+velocity = canUse('transform') ? require('velocity-animate') : null,
 
 /**
  * @desc 每个轮播图实例的标识
@@ -66,8 +69,6 @@ Loop = function (cb, time, resLen) {
     }
 };
 
-fixConsole();
-
 function prefix(options) {
     var o = options;
     if (!o.$el) {
@@ -76,7 +77,7 @@ function prefix(options) {
     return o;
 }
 
-function Slider(options){
+function Slider(options) {
     var
     /**
      * @desc 动画锁
@@ -136,17 +137,17 @@ function Slider(options){
             },
             width: config.width,
             height: config.height,
-            openType: config.openInNewTab? '_blank': '_self'
+            openType: config.openInNewTab ? '_blank' : '_self'
         }));
-        //todo: jquery.transition所依赖的jquery版本过新
-        if (canUse('transformssssssss')) {
-
+        //todo: 根据浏览器对CSS3的支持情况选择不同的动画执行方式
+        if (canUse('transform')) {
+            $('.zp_s' + sid + ' .zp_slider').css({transform: 'translateX(-' + config.width + 'px)'});
         } else {
-            $('.zp_s'+sid+' .zp_slider').css({left: '-' + config.width + 'px'});
+            $('.zp_s' + sid + ' .zp_slider').css({left: '-' + config.width + 'px'});
         }
     }
 
-    $('.zp_s'+sid).mouseenter(function () {
+    $('.zp_s' + sid).mouseenter(function () {
         loop.stop();
     }).mouseleave(function () {
         loop.play();
@@ -156,7 +157,7 @@ function Slider(options){
 
     this.turn = function (i) {
         i--;
-        if (lock) {
+        if (lock || i == loop.getCurItem()) {
             return;
         }
         lock = true;
@@ -179,13 +180,27 @@ function Slider(options){
 
     function _slide(i) {
         var iNext = i + 2;
-        //todo: jquery.transition所依赖的jquery版本过新
-        if (canUse('transformsssssssss')) {
-
-        } else {
-            $('.zp_s'+sid+' .zp_slider').animate({left: '-' + config.width * iNext + 'px'}, config.transformTime, 'swing', function () {
+        //todo: 根据浏览器对CSS3的支持情况选择不同的动画执行方式
+        if (canUse('transform')) {
+            var curTranslateX = '';
+            $('.zp_s' + sid + ' .zp_slider').css('transform').replace(/[\w|\W]*(-.*),[\w|\W]*/, function (s, $1) {
+                curTranslateX = $1;
+            });
+            $('.zp_s' + sid + ' .zp_slider').velocity({translateX: ['-' + config.width * iNext + 'px', curTranslateX + 'px']}, config.transformTime, 'swing', function () {
                 if (iNext == res.length + 1) {
-                    $('.zp_s'+sid+' .zp_slider').css({left: '-' + config.width + 'px'});
+                    $('.zp_s' + sid + ' .zp_slider').css({transform: 'translateX(-' + config.width + 'px)'});
+                }
+                lock = false;
+                if (!loop.isPlay()) {
+                    loop.play();
+                }
+                var curItem = loop.getCurItem() == res.length - 1 ? 0 : loop.getCurItem() + 1;
+                config.cb(curItem);
+            });
+        } else {
+            $('.zp_s' + sid + ' .zp_slider').animate({left: '-' + config.width * iNext + 'px'}, config.transformTime, 'swing', function () {
+                if (iNext == res.length + 1) {
+                    $('.zp_s' + sid + ' .zp_slider').css({left: '-' + config.width + 'px'});
                 }
                 lock = false;
                 if (!loop.isPlay()) {
@@ -198,7 +213,7 @@ function Slider(options){
     }
 }
 
-function init(options){
+function init(options) {
     return new Slider(options);
 }
 
