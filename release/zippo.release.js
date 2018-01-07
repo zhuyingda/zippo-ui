@@ -1593,12 +1593,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var $body = $('body'), $html = $('html');
 	    if (!options.top) {
 	        $('#' + id + ' .zp_wrapper').css({
-	            'margin-top': '-' + $('.zp_wrapper').height() / 2 + 'px'
+	            'margin-top': '-' + $('#' + id + ' .zp_wrapper').height() / 2 + 'px'
 	        });
 	    }
 	    if (!options.left) {
 	        $('#' + id + ' .zp_wrapper').css({
-	            'margin-left': '-' + $('.zp_wrapper').width() / 2 + 'px'
+	            'margin-left': '-' + $('#' + id + ' .zp_wrapper').width() / 2 + 'px'
 	        });
 	    }
 	    $('#' + id).css({display: 'none', visibility: 'inherit'});
