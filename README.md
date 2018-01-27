@@ -1,6 +1,12 @@
 zippo-ui — a developing JavaScript ui library
 ==================================================
 
+-----
+
+build:
+`gulp -m mask`
+
+-----
 
 简单介绍 What is zippo-ui?
 ----------------------------------------------
